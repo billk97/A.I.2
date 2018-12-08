@@ -1,69 +1,73 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class Read {
-    private static int[] WordArray;
+    //contains in each column an integer table with the number of times the words occur
+    private ArrayList<int[]> MailArray =  new ArrayList<int[]>();
+    private int TrainingParts=8;
+    private int[] WordArray;
+    private int max;
+
     public void ReadFile() throws FileNotFoundException {
+
         String path = "src\\pu_corpora_public\\pu1\\part";
-        int max = getMax(path);
-        WordArray=new int[max+1];
-        Arrays.fill(WordArray,0);
+        max = getMax(path);
+        /***The array that contains the time that its word is used
+        +1 in order to use all the words
+         **/
+        //WordArray=new int[max+2];
         inputToArray(path);
-        int maxl = 0;
-        int thesi =0;
-        int totalNumberOfWords=0;
-        for(int i=0; i<WordArray.length ;i++)
+        System.out.println("Max length: " +MailArray.size());
+        for(int i=0; i<WordArray.length; i++)
         {
-            if(WordArray[i]>=maxl)
-            {
-                maxl=WordArray[i];
-                thesi=i;
-            }
-            totalNumberOfWords=totalNumberOfWords+WordArray[i];
+            System.out.println("i= "+i+ " MailArray: " + MailArray.get(4)[i]);
         }
-        System.out.println("the dictionary is: "+WordArray.length);
-        System.out.println("total number of words is: "+ totalNumberOfWords);
-        System.out.println("The number of spam messages is: "+ getSpam(path));
-        System.out.println("The number of Legit messages is: "+ getLegit(path));
-        System.out.println("The most used Word is: "+ thesi+" and is used: "+maxl+" times");
 
     }
-    private static int getSpam(String path) throws FileNotFoundException
+
+    private  void inputToArray(String path)throws  FileNotFoundException
     {
-        int SpamCount=0;
-        for (int i = 1; i <= 10; i++) {
+        int ArrayCounter=0;
+        for (int i = 1; i <= TrainingParts; i++) {
             String localPath = path + Integer.toString(i);
             File dir = new File(localPath);
             for (File file : dir.listFiles()) {
-                if(file.getName().contains("spmsg"))
-                {
-                    SpamCount++;
+                WordArray = new int[max+2];
+                System.out.println("file Name: "+ file.toString());
+                Scanner scanner = new Scanner(file);
+                while (scanner.hasNext()) {
+                    String word = scanner.next();
+                    if(!word.equals("Subject:"))
+                    {
+                        int thesi=Integer.parseInt(word);
+                        WordArray[thesi]++;
+                    }
+                }//endwhile
+                //if spam then puts 1 in the end
+                if(checkSpam(file)){
+                    WordArray[max+1]++;
                 }
+                MailArray.add(ArrayCounter,WordArray);
+                ArrayCounter++;
+                scanner.close();
             }//end for file
         }//end for part number
-        return SpamCount;
     }
-    private static int getLegit(String path) throws FileNotFoundException
+    /**check if the given file is spam or ham**/
+    private  boolean checkSpam(File dir) throws FileNotFoundException
     {
-        int LegitCount=0;
-        for (int i = 1; i <= 10; i++) {
-            String localPath = path + Integer.toString(i);
-            File dir = new File(localPath);
-            for (File file : dir.listFiles()) {
-                if(file.getName().contains("legit"))
-                {
-                    LegitCount++;
-                }
-            }//end for file
-        }//end for part number
-        return LegitCount;
+        if(dir.getName().contains("spmsg"))
+        {
+            return true;
+        }
+        return false;
     }
-
-    private static int getMax(String path) throws FileNotFoundException {
+    private  int getMax(String path) throws FileNotFoundException {
         int maxNumber = 0;
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= TrainingParts; i++) {
             String localPath = path + Integer.toString(i);
             File dir = new File(localPath);
             for (File file : dir.listFiles()) {
@@ -83,23 +87,5 @@ public class Read {
         }//end for part number
         return maxNumber;
     }//end getMaX
-    private static void inputToArray(String path)throws  FileNotFoundException
-    {
-        for (int i = 1; i <= 10; i++) {
-            String localPath = path + Integer.toString(i);
-            File dir = new File(localPath);
-            for (File file : dir.listFiles()) {
-                Scanner scanner = new Scanner(file);
-                while (scanner.hasNext()) {
-                    String word = scanner.next();
-                    if(!word.equals("Subject:"))
-                    {
-                        int thesi=Integer.parseInt(word);
-                        WordArray[thesi]++;
-                    }
-                }//endwhile
-                scanner.close();
-            }//end for file
-        }//end for part number
-    }
+
 }
