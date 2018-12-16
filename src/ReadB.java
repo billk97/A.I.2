@@ -15,7 +15,7 @@ public class ReadB {
 
     private void inputToHashMap(String path) throws FileNotFoundException {
 
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <=9; i++) {
             String localPath = path + Integer.toString(i);
             File dir = new File(localPath);
             for (File file : dir.listFiles()) {
