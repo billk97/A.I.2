@@ -14,8 +14,6 @@ public class Main {
         ReadB readb=new ReadB();
         readb.ReadMail();
 
-
-
     }
 
 }
