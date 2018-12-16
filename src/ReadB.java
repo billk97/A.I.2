@@ -15,7 +15,7 @@ public class ReadB {
 
     private void inputToHashMap(String path) throws FileNotFoundException {
 
-        for (int i = 1; i <= 9; i++) {
+        for (int i = 1; i <= 10; i++) {
             String localPath = path + Integer.toString(i);
             File dir = new File(localPath);
             for (File file : dir.listFiles()) {
@@ -77,8 +77,8 @@ public class ReadB {
 
     private void Propability() {
         for (int lexi : MailHash.keySet()) {
-            MailHash.get(lexi)[0] = Math.pow(Math.log(MailHash.get(lexi)[0] / SpamCounter),2);
-            MailHash.get(lexi)[1] = Math.pow(Math.log(MailHash.get(lexi)[1] / HammCounter),2);
+            MailHash.get(lexi)[0] = Math.pow(Math.log(MailHash.get(lexi)[0] / (double)SpamCounter),2);
+            MailHash.get(lexi)[1] = Math.pow(Math.log(MailHash.get(lexi)[1] / (double)HammCounter),2);
         }
     }
 
@@ -92,11 +92,11 @@ public class ReadB {
     }
 
     public double getSpamPropability() {
-        return SpamCounter / (SpamCounter + HammCounter);
+        return (double) SpamCounter / ((double)SpamCounter + (double)HammCounter);
     }
 
     public double getHamPropability() {
-        return 1 - getSpamPropability();
+        return 1.0 - getSpamPropability();
     }
 
     public void CalculateTest(String path) throws FileNotFoundException {
@@ -127,15 +127,15 @@ public class ReadB {
 
 
                 } else {
-                    SpamPropability = SpamPropability + Math.pow(Math.log(1/SpamCounter),2);
-                    HamPropability = HamPropability + Math.pow(Math.log(1/HammCounter),2);
+                    SpamPropability = SpamPropability + Math.pow(Math.log(1.0/(double)SpamCounter),2);
+                    HamPropability = HamPropability + Math.pow(Math.log(1.0/(double)HammCounter),2);
 
                 }
               //  System.out.println("Word: " + word + " spam " + SpamPropability + " ham " + HamPropability);
 
             }
 
-            if (SpamPropability * getSpamPropability() <= HamPropability * getHamPropability()) {
+            if (SpamPropability * getSpamPropability() > HamPropability * getHamPropability()) {
                 System.out.println("Its a Ham eimai sto file " + file.toString());
                 if(!checkSpam(file)){
                    correctCounterMessage++;
@@ -153,6 +153,8 @@ public class ReadB {
          System.out.println(counterMessage);
          double d =(double) correctCounterMessage/(double) counterMessage;
          System.out.println(d*100);
+        System.out.println(getSpamPropability());
+        System.out.println(getHamPropability());
     }
 }
 
