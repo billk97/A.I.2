@@ -1,3 +1,4 @@
+import javax.naming.ldap.PagedResultsControl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
@@ -12,10 +13,11 @@ public class ReadB {
     private HashSet<Integer> tempSet;
     private int SpamCounter = 0;
     private int HammCounter = 0;
+    private double TrueFalse[] = {0.0, 0.0, 0.0, 0.0};
 
     private void inputToHashMap(String path) throws FileNotFoundException {
 
-        for (int i = 1; i <=9; i++) {
+        for (int i = 1; i <= 9; i++) {
             String localPath = path + Integer.toString(i);
             File dir = new File(localPath);
             for (File file : dir.listFiles()) {
@@ -77,8 +79,8 @@ public class ReadB {
 
     private void Propability() {
         for (int lexi : MailHash.keySet()) {
-            MailHash.get(lexi)[0] = Math.pow(Math.log(MailHash.get(lexi)[0] / (double)SpamCounter),2);
-            MailHash.get(lexi)[1] = Math.pow(Math.log(MailHash.get(lexi)[1] / (double)HammCounter),2);
+            MailHash.get(lexi)[0] = Math.pow(Math.log(MailHash.get(lexi)[0] / (double) SpamCounter), 2);
+            MailHash.get(lexi)[1] = Math.pow(Math.log(MailHash.get(lexi)[1] / (double) HammCounter), 2);
         }
     }
 
@@ -92,7 +94,7 @@ public class ReadB {
     }
 
     public double getSpamPropability() {
-        return (double) SpamCounter / ((double)SpamCounter + (double)HammCounter);
+        return (double) SpamCounter / ((double) SpamCounter + (double) HammCounter);
     }
 
     public double getHamPropability() {
@@ -102,10 +104,7 @@ public class ReadB {
     public void CalculateTest(String path) throws FileNotFoundException {
         String localPath = path + Integer.toString(10);
         File dir = new File(localPath);
-        int counterMessage=0;
-        int correctCounterMessage=0;
         for (File file : dir.listFiles()) {
-         counterMessage++;
             tempSet = new HashSet<Integer>();
             Scanner scanner = new Scanner(file);
             while (scanner.hasNext()) {
@@ -127,34 +126,58 @@ public class ReadB {
 
 
                 } else {
-                    SpamPropability = SpamPropability + Math.pow(Math.log(1.0/(double)SpamCounter),2);
-                    HamPropability = HamPropability + Math.pow(Math.log(1.0/(double)HammCounter),2);
+                    SpamPropability = SpamPropability + Math.pow(Math.log(1.0 / (double) SpamCounter), 2);
+                    HamPropability = HamPropability + Math.pow(Math.log(1.0 / (double) HammCounter), 2);
 
                 }
-              //  System.out.println("Word: " + word + " spam " + SpamPropability + " ham " + HamPropability);
+                //  System.out.println("Word: " + word + " spam " + SpamPropability + " ham " + HamPropability);
 
             }
 
             if (SpamPropability * getSpamPropability() > HamPropability * getHamPropability()) {
                 System.out.println("Its a Ham eimai sto file " + file.toString());
-                if(!checkSpam(file)){
-                   correctCounterMessage++;
+                /**TrueFalse==TP,TN,FP,FN**/
+                if (!checkSpam(file)) {
+                    TrueFalse[0]++;
+                } else {
+                    TrueFalse[2]++;
                 }
             } else {
                 System.out.println("Its a Spam eimai sto file " + file.toString());
-                if(checkSpam(file)){
-                    correctCounterMessage++;
+                if (checkSpam(file)) {
+                    TrueFalse[1]++;
+                } else {
+                    TrueFalse[3]++;
                 }
             }
-
         }//end for
-
-         System.out.println(correctCounterMessage);
-         System.out.println(counterMessage);
-         double d =(double) correctCounterMessage/(double) counterMessage;
-         System.out.println(d*100);
+        System.out.println("Accuracy: " + Accuracy());
         System.out.println(getSpamPropability());
         System.out.println(getHamPropability());
+        System.out.println("HamPRecision: " + HamPrecision());
+        System.out.println("SpamPRecision: " + SpamPrecision());
+        System.out.println("HamRecall: " + HamRecall());
+        System.out.println("SpamRecall: " + SpamRecall());
+    }
+
+    private double Accuracy() {
+        return ((TrueFalse[0] + TrueFalse[1]) / (TrueFalse[0] + TrueFalse[1] + TrueFalse[2] + TrueFalse[3])) * 100;
+    }
+
+    private double HamPrecision() {
+        return (TrueFalse[0] / (TrueFalse[0] + TrueFalse[2])) * 100;
+    }
+
+    private double SpamPrecision() {
+        return (TrueFalse[1] / (TrueFalse[1] + TrueFalse[3])) * 100;
+    }
+
+    private double HamRecall() {
+        return (TrueFalse[0] / (TrueFalse[0] + TrueFalse[3])) * 100;
+    }
+
+    private double SpamRecall() {
+        return (TrueFalse[1] / (TrueFalse[1] + TrueFalse[2])) * 100;
     }
 }
 
