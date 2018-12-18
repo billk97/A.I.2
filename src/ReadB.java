@@ -9,15 +9,17 @@ import java.util.Scanner;
 import static jdk.nashorn.internal.objects.NativeMath.round;
 
 public class ReadB {
-    private HashMap<Integer, Double[]> MailHash = new HashMap<Integer, Double[]>();
+    private HashMap<Integer, Double[]> MailHash ;
     private HashSet<Integer> tempSet;
-    private int SpamCounter = 0;
-    private int HammCounter = 0;
+    private int SpamCounter;
+    private int HammCounter;
     private double TrueFalse[] = {0.0, 0.0, 0.0, 0.0};
 
-    private void inputToHashMap(String path) throws FileNotFoundException {
-
-        for (int i = 1; i <= 9; i++) {
+    private void inputToHashMap(String path, int posost) throws FileNotFoundException {
+        MailHash= new HashMap<Integer, Double[]>();
+        SpamCounter=0;
+        HammCounter=0;
+        for (int i = 1; i <= posost; i++) {
             String localPath = path + Integer.toString(i);
             File dir = new File(localPath);
             for (File file : dir.listFiles()) {
@@ -59,6 +61,7 @@ public class ReadB {
                 scanner.close();
                 // tempSet.clear();
             }
+
         }
         for (int lexi : MailHash.keySet()) {
             MailHash.get(lexi)[0]++;
@@ -86,11 +89,33 @@ public class ReadB {
 
     public void ReadMail() throws FileNotFoundException {
         String path = "src\\pu_corpora_public\\pu1\\part";
-        inputToHashMap(path);
-        /*for (int word : MailHash.keySet()) {
-            System.out.println(word + " " + "spam is: " + MailHash.get(word)[0] + " ham is: " + MailHash.get(word)[1]);
-        }*/
+        inputToHashMap(path,1);
         CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path,2);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path,3);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path,4);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path,5);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path,6);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path,7);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path,8);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path,9);
+        CalculateTest(path);
+        System.out.println("==================");
     }
 
     public double getSpamPropability() {
@@ -102,6 +127,10 @@ public class ReadB {
     }
 
     public void CalculateTest(String path) throws FileNotFoundException {
+        TrueFalse[0] = 0.0;
+        TrueFalse[1] = 0.0;
+        TrueFalse[2] = 0.0;
+        TrueFalse[3] = 0.0;
         String localPath = path + Integer.toString(10);
         File dir = new File(localPath);
         for (File file : dir.listFiles()) {
@@ -135,7 +164,7 @@ public class ReadB {
             }
 
             if (SpamPropability * getSpamPropability() > HamPropability * getHamPropability()) {
-                System.out.println("Its a Ham eimai sto file " + file.toString());
+                //System.out.println("Its a Ham eimai sto file " + file.toString());
                 /**TrueFalse==TP,TN,FP,FN**/
                 if (!checkSpam(file)) {
                     TrueFalse[0]++;
@@ -143,7 +172,7 @@ public class ReadB {
                     TrueFalse[2]++;
                 }
             } else {
-                System.out.println("Its a Spam eimai sto file " + file.toString());
+                //System.out.println("Its a Spam eimai sto file " + file.toString());
                 if (checkSpam(file)) {
                     TrueFalse[1]++;
                 } else {
