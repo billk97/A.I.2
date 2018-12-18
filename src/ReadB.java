@@ -9,16 +9,16 @@ import java.util.Scanner;
 import static jdk.nashorn.internal.objects.NativeMath.round;
 
 public class ReadB {
-    private HashMap<Integer, Double[]> MailHash ;
+    private HashMap<Integer, Double[]> MailHash;
     private HashSet<Integer> tempSet;
     private int SpamCounter;
     private int HammCounter;
     private double TrueFalse[] = {0.0, 0.0, 0.0, 0.0};
 
     private void inputToHashMap(String path, int posost) throws FileNotFoundException {
-        MailHash= new HashMap<Integer, Double[]>();
-        SpamCounter=0;
-        HammCounter=0;
+        MailHash = new HashMap<Integer, Double[]>();
+        SpamCounter = 0;
+        HammCounter = 0;
         for (int i = 1; i <= posost; i++) {
             String localPath = path + Integer.toString(i);
             File dir = new File(localPath);
@@ -71,7 +71,7 @@ public class ReadB {
         HammCounter += 2;
         Propability();
         System.out.println("SpamCounter: " + SpamCounter + " HammCounter: " + HammCounter);
-        System.out.println("Counter: " + (SpamCounter  + HammCounter));
+        System.out.println("Counter: " + (SpamCounter + HammCounter));
     }
 
     private boolean checkSpam(File dir) throws FileNotFoundException {
@@ -83,38 +83,38 @@ public class ReadB {
 
     private void Propability() {
         for (int lexi : MailHash.keySet()) {
-            MailHash.get(lexi)[0] = Math.pow(Math.log(MailHash.get(lexi)[0] / (double) SpamCounter), 2);
-            MailHash.get(lexi)[1] = Math.pow(Math.log(MailHash.get(lexi)[1] / (double) HammCounter), 2);
+            MailHash.get(lexi)[0] = Math.log(1.0 + (MailHash.get(lexi)[0] / (double) SpamCounter));
+            MailHash.get(lexi)[1] = Math.log(1.0 + (MailHash.get(lexi)[1] / (double) HammCounter));
         }
     }
 
     public void ReadMail() throws FileNotFoundException {
         String path = "src\\pu_corpora_public\\pu1\\part";
-        inputToHashMap(path,1);
+        inputToHashMap(path, 1);
         CalculateTest(path);
         System.out.println("==================");
-        inputToHashMap(path,2);
+        inputToHashMap(path, 2);
         CalculateTest(path);
         System.out.println("==================");
-        inputToHashMap(path,3);
+        inputToHashMap(path, 3);
         CalculateTest(path);
         System.out.println("==================");
-        inputToHashMap(path,4);
+        inputToHashMap(path, 4);
         CalculateTest(path);
         System.out.println("==================");
-        inputToHashMap(path,5);
+        inputToHashMap(path, 5);
         CalculateTest(path);
         System.out.println("==================");
-        inputToHashMap(path,6);
+        inputToHashMap(path, 6);
         CalculateTest(path);
         System.out.println("==================");
-        inputToHashMap(path,7);
+        inputToHashMap(path, 7);
         CalculateTest(path);
         System.out.println("==================");
-        inputToHashMap(path,8);
+        inputToHashMap(path, 8);
         CalculateTest(path);
         System.out.println("==================");
-        inputToHashMap(path,9);
+        inputToHashMap(path, 9);
         CalculateTest(path);
         System.out.println("==================");
     }
@@ -156,15 +156,15 @@ public class ReadB {
 
 
                 } else {
-                    SpamPropability = SpamPropability + Math.pow(Math.log(1.0 / (double) SpamCounter), 2);
-                    HamPropability = HamPropability + Math.pow(Math.log(1.0 / (double) HammCounter), 2);
+                    SpamPropability = SpamPropability + Math.log(1.0 + (1.0 / (double) SpamCounter));
+                    HamPropability = HamPropability + Math.log(1.0 + (1.0 / (double) HammCounter));
 
                 }
                 //  System.out.println("Word: " + word + " spam " + SpamPropability + " ham " + HamPropability);
 
             }
 
-            if (SpamPropability * getSpamPropability() > HamPropability * getHamPropability()) {
+            if (SpamPropability * getSpamPropability() < HamPropability * getHamPropability()) {
                 //System.out.println("Its a Ham eimai sto file " + file.toString());
                 /**TrueFalse==TP,TN,FP,FN**/
                 if (!checkSpam(file)) {
