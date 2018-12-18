@@ -55,8 +55,8 @@ public class TestBayes {
         String localPath = path + Integer.toString(10);
         File dir = new File(localPath);
         for (File file : dir.listFiles()) {
-            double SpamProbability = 1.0;
-            double HamProbability = 1.0;
+            double SpamProbability = 0.0;
+            double HamProbability = 0.0;
             biData.tempSet = new HashSet<Integer>();
             Scanner scanner = new Scanner(file);
             while (scanner.hasNext()) {

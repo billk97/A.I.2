@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fc361a43-7339-4399-bd23-be8bebd9afe5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/BiData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/TestBayes.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Read.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ReadB.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TestBayes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TestBayes.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,8 +20,8 @@
             <file pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/src/TestBayes.java">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="500">
-                    <caret line="33" column="47" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="47" />
+                  <state relative-caret-position="1000">
+                    <caret line="58" column="37" selection-start-line="58" selection-start-column="37" selection-end-line="58" selection-end-column="37" />
                   </state>
                 </provider>
               </entry>
@@ -122,14 +118,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="24" />
-          <entry key="java" value="4683" />
-          <entry key="txt" value="75" />
+          <entry key="java" value="4685" />
+          <entry key="txt" value="83" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="4683" />
-          <entry key="PLAIN_TEXT" value="99" />
+          <entry key="JAVA" value="4685" />
+          <entry key="PLAIN_TEXT" value="107" />
         </counts>
       </usages-collector>
     </session>
@@ -200,8 +196,8 @@
         <option value="$PROJECT_DIR$/src/BiData.java" />
         <option value="$PROJECT_DIR$/src/ReadB.java" />
         <option value="$PROJECT_DIR$/src/BayesTxt.java" />
-        <option value="$PROJECT_DIR$/src/TestBayes.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
+        <option value="$PROJECT_DIR$/src/TestBayes.java" />
       </list>
     </option>
   </component>
@@ -233,12 +229,6 @@
               <item name="A.I.2" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="CodeFolder" type="b2602c69:ProjectViewProjectNode" />
-              <item name="A.I.2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="pu_corpora_public" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -251,7 +241,7 @@
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545164589913" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545165298105" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -372,7 +362,14 @@
       <option name="project" value="LOCAL" />
       <updated>1545162364983</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Bayes almost ready same comments graph and clean up version2">
+      <created>1545164772884</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1545164772884</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -417,7 +414,8 @@
     <MESSAGE value="Bayes almost ready needs commnts graph and clean up" />
     <MESSAGE value="Bayes almost ready needs commnts graph and clean up βιλλ" />
     <MESSAGE value="Bayes almost ready needs comments graph and clean up version1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bayes almost ready needs comments graph and clean up version1" />
+    <MESSAGE value="Bayes almost ready same comments graph and clean up version2" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bayes almost ready same comments graph and clean up version2" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/Bayes.java" />
@@ -433,13 +431,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret lean-forward="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TestBayes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="500">
-          <caret line="33" column="47" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="47" />
         </state>
       </provider>
     </entry>
@@ -486,6 +477,13 @@
             <element signature="e#5523#5524#0" expanded="true" />
             <element signature="e#5598#5599#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TestBayes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1000">
+          <caret line="58" column="37" selection-start-line="58" selection-start-column="37" selection-end-line="58" selection-end-column="37" />
         </state>
       </provider>
     </entry>
