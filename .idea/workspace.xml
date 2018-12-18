@@ -23,8 +23,8 @@
             <file pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/src/ReadB.java">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="1138">
-                    <caret line="176" column="28" selection-start-line="176" selection-start-column="28" selection-end-line="176" selection-end-column="28" />
+                  <state relative-caret-position="578">
+                    <caret line="38" column="34" lean-forward="true" selection-start-line="38" selection-start-column="34" selection-end-line="38" selection-end-column="34" />
                     <folding>
                       <element signature="e#4365#4366#0" expanded="true" />
                       <element signature="e#4456#4457#0" expanded="true" />
@@ -126,13 +126,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="4254" />
+          <entry key="java" value="4417" />
           <entry key="txt" value="65" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="4254" />
+          <entry key="JAVA" value="4417" />
           <entry key="PLAIN_TEXT" value="65" />
         </counts>
       </usages-collector>
@@ -224,7 +224,7 @@
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545159861875" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545162186617" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -324,7 +324,14 @@
       <option name="project" value="LOCAL" />
       <updated>1545158472770</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Bayes almost ready needs commnts graph and clean up βιλλ">
+      <created>1545159889055</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1545159889055</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -392,8 +399,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ReadB.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1138">
-          <caret line="176" column="28" selection-start-line="176" selection-start-column="28" selection-end-line="176" selection-end-column="28" />
+        <state relative-caret-position="578">
+          <caret line="38" column="34" lean-forward="true" selection-start-line="38" selection-start-column="34" selection-end-line="38" selection-end-column="34" />
           <folding>
             <element signature="e#4365#4366#0" expanded="true" />
             <element signature="e#4456#4457#0" expanded="true" />

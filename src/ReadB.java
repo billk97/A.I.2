@@ -26,54 +26,15 @@ public class ReadB {
         try {
             writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream("filename.txt"), "utf-8"));
-
-
             String path = "src\\pu_corpora_public\\pu1\\part";
-            inputToHashMap(path, 1);
-            CalculateTest(path);
-            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
-            ((BufferedWriter) writer).newLine();
-            System.out.println("==================");
-            inputToHashMap(path, 2);
-            CalculateTest(path);
-            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
-            ((BufferedWriter) writer).newLine();
-            System.out.println("==================");
-            inputToHashMap(path, 3);
-            CalculateTest(path);
-            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
-            ((BufferedWriter) writer).newLine();
-            System.out.println("==================");
-            inputToHashMap(path, 4);
-            CalculateTest(path);
-            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
-            ((BufferedWriter) writer).newLine();
-            System.out.println("==================");
-            inputToHashMap(path, 5);
-            CalculateTest(path);
-            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
-            ((BufferedWriter) writer).newLine();
-            System.out.println("==================");
-            inputToHashMap(path, 6);
-            CalculateTest(path);
-            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
-            ((BufferedWriter) writer).newLine();
-            System.out.println("==================");
-            inputToHashMap(path, 7);
-            CalculateTest(path);
-            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
-            ((BufferedWriter) writer).newLine();
-            System.out.println("==================");
-            inputToHashMap(path, 8);
-            CalculateTest(path);
-            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
-            ((BufferedWriter) writer).newLine();
-            System.out.println("==================");
-            inputToHashMap(path, 9);
-            CalculateTest(path);
-            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
-            ((BufferedWriter) writer).newLine();
-            System.out.println("==================");
+            for(int i=1; i<10; i++)
+            {
+                inputToHashMap(path, i);
+                CalculateTest(path);
+                writer.write((SpamCounter + HammCounter) + " " + Accuracy());
+                ((BufferedWriter) writer).newLine();
+                System.out.println("==================");
+            }
         } catch (IOException ex) {
             // Report
         } finally {
@@ -82,7 +43,6 @@ public class ReadB {
             } catch (Exception ex) {/*ignore*/}
         }
     }
-
     /**
      * this function inputs all the data from the txt
      * into a HashMap
@@ -118,44 +78,49 @@ public class ReadB {
                 }//end while
                 if (checkSpam(file)) {//if its spam
                     /**increases the SpamCounter if the word is found in a Spam mail **/
-                    /**loops all the tempSet which contains
-                     * unique word **/
-                    for (int k : tempSet) {
-                        if (MailHash.containsKey(k)) {
-                            /**checks if the (word)=k that is contained in the mail
-                             * exists in the known words or dictionary
-                             * and ads an counter which means that the word is found
-                             * at least 1 time**/
-                            MailHash.get(k)[0] += 1;
-
-                        } else {
-                            /**if (word)=k does not exists it create on
-                             * which contains 1 table 1 column for the number of spam
-                             * 1 for the number of ham**/
-                            MailHash.put(k, new Double[]{0.0, 0.0});
-                            MailHash.get(k)[0] += 1;
-                        }
-                    }//end for
+                    UpdateMailHash(0);
                 } else {
-                    for (int k : tempSet) {
-                        if (MailHash.containsKey(k)) {
-                            MailHash.get(k)[1] += 1;
-                        } else {
-                            MailHash.put(k, new Double[]{0.0, 0.0});
-                            MailHash.get(k)[1] += 1;
-                        }
-                    }//end for
-                }
+                    /**increases the HamCounter if the word is found in a Ham mail **/
+                    UpdateMailHash(1);
+                }//end if
                 scanner.close();
                 // tempSet.clear();
-            }
-
-        }
+            }//end for2
+        }//end for1
         Laplace();
         Probability();
         System.out.println("SpamCounter: " + SpamCounter + " HammCounter: " + HammCounter);
         System.out.println("Counter: " + (SpamCounter + HammCounter));
-    }
+    }//end input To HashMap
+
+    /**this function Updates the MailHash HashMap
+     * and increases the counter when an word is found in a email **/
+    private void UpdateMailHash(int i)
+    {
+        /**loops all the tempSet which contains
+         * unique word **/
+        for (int k : tempSet) {
+            /**checks if the (word)=k that is contained in the mail
+             * exists in the known words or dictionary
+             * and ads an counter which means that the word is found
+             * at least 1 time**/
+            if (MailHash.containsKey(k)) {
+
+                MailHash.get(k)[i] += 1;
+
+            } else {
+                /**if (word)=k does not exists it create on
+                 * which contains 1 table 1 column for the number of spam
+                 * 1 for the number of ham**/
+                MailHash.put(k, new Double[]{0.0, 0.0});
+                MailHash.get(k)[i] += 1;
+            }
+        }//end for
+    }//end UpdateMailHash
+
+    /**this function implements the laplace algorithm
+     * which in order to escape from having 0 ass a probability
+     * ads 1/2 in all **/
     private void Laplace()
     {
         for (int lexi : MailHash.keySet()) {
@@ -199,6 +164,8 @@ public class ReadB {
         String localPath = path + Integer.toString(10);
         File dir = new File(localPath);
         for (File file : dir.listFiles()) {
+            double SpamProbability = 1.0;
+            double HamProbability = 1.0;
             tempSet = new HashSet<Integer>();
             Scanner scanner = new Scanner(file);
             while (scanner.hasNext()) {
@@ -208,27 +175,21 @@ public class ReadB {
                     tempSet.add(cell);
                 }
             }//end while
-            double SpamPropability = 1.0;
-            double HamPropability = 1.0;
-
-
+            /**for every unique word in the mail**/
             for (int word : tempSet) {
+                /**if the word exists then probaWord1+probaWord2+probaWord3....
+                 * to get the total probability adding the probability because
+                 * log(a*b)=log(a)+log(b) for spam and ham**/
                 if (MailHash.containsKey(word)) {
-
-                    SpamPropability = SpamPropability + MailHash.get(word)[0];
-                    HamPropability = HamPropability + MailHash.get(word)[1];
-
-
+                    SpamProbability = SpamProbability + MailHash.get(word)[0];
+                    HamProbability = HamProbability + MailHash.get(word)[1];
                 } else {
-                    SpamPropability = SpamPropability + Math.log(1.0 + (1.0 / (double) SpamCounter));
-                    HamPropability = HamPropability + Math.log(1.0 + (1.0 / (double) HammCounter));
-
+                    SpamProbability = SpamProbability + Math.log(1.0 + (1.0 / (double) SpamCounter));
+                    HamProbability = HamProbability + Math.log(1.0 + (1.0 / (double) HammCounter));
                 }
-                //  System.out.println("Word: " + word + " spam " + SpamPropability + " ham " + HamPropability);
-
             }
-
-            if (SpamPropability * getSpamPropability() < HamPropability * getHamPropability()) {
+            /**takes a decision **/
+            if (SpamProbability * getSpamPropability() < HamProbability * getHamPropability()) {
                 //System.out.println("Its a Ham eimai sto file " + file.toString());
                 /**TrueFalse==TP,TN,FP,FN**/
                 if (!checkSpam(file)) {
@@ -243,11 +204,11 @@ public class ReadB {
                 } else {
                     TrueFalse[3]++;
                 }
-            }
+            }//end else
         }//end for
         System.out.println("Accuracy: " + Accuracy());
-        System.out.println(getSpamPropability());
-        System.out.println(getHamPropability());
+        System.out.println("Spam Probability: "+getSpamPropability());
+        System.out.println("Ham Probability: "+getHamPropability());
         System.out.println("HamPRecision: " + HamPrecision());
         System.out.println("SpamPRecision: " + SpamPrecision());
         System.out.println("HamRecall: " + HamRecall());
@@ -255,9 +216,7 @@ public class ReadB {
     }
 
     private double Accuracy() {
-        return ((TrueFalse[0] + TrueFalse[1]) / (TrueFalse[0] + TrueFalse[1] + TrueFalse[2] + TrueFalse[3])) * 100;
-    }
-
+        return ((TrueFalse[0] + TrueFalse[1]) / (TrueFalse[0] + TrueFalse[1] + TrueFalse[2] + TrueFalse[3])) * 100;}
     private double HamPrecision() {
         return (TrueFalse[0] / (TrueFalse[0] + TrueFalse[2])) * 100;
     }
