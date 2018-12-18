@@ -71,6 +71,7 @@ public class ReadB {
         HammCounter += 2;
         Propability();
         System.out.println("SpamCounter: " + SpamCounter + " HammCounter: " + HammCounter);
+        System.out.println("Counter: " + (SpamCounter  + HammCounter));
     }
 
     private boolean checkSpam(File dir) throws FileNotFoundException {
