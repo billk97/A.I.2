@@ -1,3 +1,6 @@
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
@@ -10,7 +13,6 @@ public class Main {
     {
        // Read read =new Read();
        // read.ReadFile();
-
         ReadB readb=new ReadB();
         readb.ReadMail();
     }

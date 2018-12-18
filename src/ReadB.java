@@ -14,30 +14,73 @@ public class ReadB {
     private int SpamCounter;
     private int HammCounter;
     private double TrueFalse[] = {0.0, 0.0, 0.0, 0.0};
-
+    /**this function loads the Training data
+     * (loads the propabilites in  a hashMap type double[]
+     * called MailHash) this function loads the Testing data**/
+    public void ReadMail() throws FileNotFoundException {
+        String path = "src\\pu_corpora_public\\pu1\\part";
+        inputToHashMap(path, 1);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path, 2);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path, 3);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path, 4);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path, 5);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path, 6);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path, 7);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path, 8);
+        CalculateTest(path);
+        System.out.println("==================");
+        inputToHashMap(path, 9);
+        CalculateTest(path);
+        System.out.println("==================");
+    }
+    /**this function inputs all the data from the txt
+     * into a HashMap
+     * **/
     private void inputToHashMap(String path, int posost) throws FileNotFoundException {
         MailHash = new HashMap<Integer, Double[]>();
         SpamCounter = 0;
         HammCounter = 0;
+        /**loops all the directories **/
         for (int i = 1; i <= posost; i++) {
             String localPath = path + Integer.toString(i);
             File dir = new File(localPath);
+            /**lops all the files**/
             for (File file : dir.listFiles()) {
+                /**counts the number of spam and ham email**/
                 if (checkSpam(file)) {
                     SpamCounter++;
                 } else {
                     HammCounter++;
                 }
+                /**create an new HaSet for every email
+                 * in order to store each unique word
+                 * for the specific email**/
                 tempSet = new HashSet<Integer>();
                 Scanner scanner = new Scanner(file);
                 while (scanner.hasNext()) {
-                    String word = scanner.next();
-                    if (!word.equals("Subject:")) {
-                        int cell = Integer.parseInt(word);
-                        tempSet.add(cell);
-                    }
+                    String word = scanner.next();//inputs every word in a local variable
+                    if (!word.equals("Subject:")) {//checks if its not Subject otherwise sketchy things may happen
+                        /**parses the sting that it receives into an integer
+                         * for later calculations**/
+                        tempSet.add(Integer.parseInt(word));//keep in mind add checks if the cell is unique
+                    }//end if
                 }//end while
-                if (checkSpam(file)) {
+                if (checkSpam(file)) {//if its spam
+                    /**increases the SpamCounter if the word is found in a Spam mail **/
                     for (int k : tempSet) {
                         if (MailHash.containsKey(k)) {
 
@@ -88,36 +131,7 @@ public class ReadB {
         }
     }
 
-    public void ReadMail() throws FileNotFoundException {
-        String path = "src\\pu_corpora_public\\pu1\\part";
-        inputToHashMap(path, 1);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 2);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 3);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 4);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 5);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 6);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 7);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 8);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 9);
-        CalculateTest(path);
-        System.out.println("==================");
-    }
+
 
     public double getSpamPropability() {
         return (double) SpamCounter / ((double) SpamCounter + (double) HammCounter);
