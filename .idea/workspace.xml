@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/Read.java" line="100" />
-  </component>
   <component name="ChangeListManager">
     <list default="true" id="fc361a43-7339-4399-bd23-be8bebd9afe5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/BiData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TestBayes.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ReadB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ReadB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Read.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ReadB.java" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,16 +22,10 @@
         <state>
           <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
             <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/src/ReadB.java">
+              <entry file="file://$PROJECT_DIR$/src/TestBayes.java">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="578">
-                    <caret line="38" column="34" lean-forward="true" selection-start-line="38" selection-start-column="34" selection-end-line="38" selection-end-column="34" />
-                    <folding>
-                      <element signature="e#4365#4366#0" expanded="true" />
-                      <element signature="e#4456#4457#0" expanded="true" />
-                      <element signature="e#4497#4498#0" expanded="true" />
-                      <element signature="e#4546#4547#0" expanded="true" />
-                    </folding>
+                  <state relative-caret-position="500">
+                    <caret line="33" column="47" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="47" />
                   </state>
                 </provider>
               </entry>
@@ -116,24 +111,25 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="9" />
+          <entry key="java" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="9" />
+          <entry key="JAVA" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="4417" />
-          <entry key="txt" value="65" />
+          <entry key="dummy" value="24" />
+          <entry key="java" value="4683" />
+          <entry key="txt" value="75" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="4417" />
-          <entry key="PLAIN_TEXT" value="65" />
+          <entry key="JAVA" value="4683" />
+          <entry key="PLAIN_TEXT" value="99" />
         </counts>
       </usages-collector>
     </session>
@@ -141,22 +137,34 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Read.java">
+        <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1560">
-              <caret line="82" column="7" selection-start-line="82" selection-start-column="7" selection-end-line="82" selection-end-column="7" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="160">
+              <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Main.java">
+        <entry file="file://$PROJECT_DIR$/src/BiData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="252">
+              <caret line="118" column="84" lean-forward="true" selection-start-line="118" selection-start-column="84" selection-end-line="118" selection-end-column="84" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#4768#4769#0" expanded="true" />
+                <element signature="e#4859#4860#0" expanded="true" />
+                <element signature="e#5010#5011#0" expanded="true" />
+                <element signature="e#5059#5060#0" expanded="true" />
+                <element signature="e#5191#5192#0" expanded="true" />
+                <element signature="e#5266#5267#0" expanded="true" />
+                <element signature="e#5304#5305#0" expanded="true" />
+                <element signature="e#5379#5380#0" expanded="true" />
+                <element signature="e#5413#5414#0" expanded="true" />
+                <element signature="e#5488#5489#0" expanded="true" />
+                <element signature="e#5523#5524#0" expanded="true" />
+                <element signature="e#5598#5599#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -170,6 +178,12 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>bayesData</find>
+      <find>bayesData</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -179,8 +193,15 @@
         <option value="$PROJECT_DIR$/src/Read.java" />
         <option value="$PROJECT_DIR$/src/Baeys.java" />
         <option value="$PROJECT_DIR$/src/Bayes.java" />
-        <option value="$PROJECT_DIR$/src/Main.java" />
+        <option value="$PROJECT_DIR$/src/pu_corpora_public/BayesData.java" />
+        <option value="$PROJECT_DIR$/src/ReadToMemory.java" />
+        <option value="$PROJECT_DIR$/src/BayesData.java" />
+        <option value="$PROJECT_DIR$/src/BayesInsertData.java" />
+        <option value="$PROJECT_DIR$/src/BiData.java" />
         <option value="$PROJECT_DIR$/src/ReadB.java" />
+        <option value="$PROJECT_DIR$/src/BayesTxt.java" />
+        <option value="$PROJECT_DIR$/src/TestBayes.java" />
+        <option value="$PROJECT_DIR$/src/Main.java" />
       </list>
     </option>
   </component>
@@ -212,6 +233,12 @@
               <item name="A.I.2" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="CodeFolder" type="b2602c69:ProjectViewProjectNode" />
+              <item name="A.I.2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="pu_corpora_public" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -224,7 +251,7 @@
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545162338193" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545164589913" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -331,14 +358,28 @@
       <option name="project" value="LOCAL" />
       <updated>1545159889055</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Bayes almost ready needs comments graph and clean up version1">
+      <created>1545162335059</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1545162335059</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Bayes almost ready needs comments graph and clean up version1">
+      <created>1545162364983</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1545162364983</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21801706" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.104477614" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -347,7 +388,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="1.0" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.0021691974" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.29175705" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -355,7 +396,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50053304" side_tool="true" weight="0.34815618" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.15509762" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.3286334" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.0845987" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -375,14 +416,36 @@
     <MESSAGE value="read" />
     <MESSAGE value="Bayes almost ready needs commnts graph and clean up" />
     <MESSAGE value="Bayes almost ready needs commnts graph and clean up βιλλ" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bayes almost ready needs commnts graph and clean up βιλλ" />
+    <MESSAGE value="Bayes almost ready needs comments graph and clean up version1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bayes almost ready needs comments graph and clean up version1" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/Bayes.java" />
     <entry file="file://$PROJECT_DIR$/ai_2_bayes.java" />
+    <entry file="file://$PROJECT_DIR$/src/pu_corpora_public/BayesData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ReadToMemory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TestBayes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="33" column="47" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Read.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1560">
+        <state relative-caret-position="-668">
           <caret line="82" column="7" selection-start-line="82" selection-start-column="7" selection-end-line="82" selection-end-column="7" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -392,20 +455,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        <state relative-caret-position="160">
+          <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ReadB.java">
+    <entry file="file://$PROJECT_DIR$/src/BayesTxt.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="38" column="34" lean-forward="true" selection-start-line="38" selection-start-column="34" selection-end-line="38" selection-end-column="34" />
+        <state relative-caret-position="80">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/BiData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="118" column="84" lean-forward="true" selection-start-line="118" selection-start-column="84" selection-end-line="118" selection-end-column="84" />
           <folding>
-            <element signature="e#4365#4366#0" expanded="true" />
-            <element signature="e#4456#4457#0" expanded="true" />
-            <element signature="e#4497#4498#0" expanded="true" />
-            <element signature="e#4546#4547#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#4768#4769#0" expanded="true" />
+            <element signature="e#4859#4860#0" expanded="true" />
+            <element signature="e#5010#5011#0" expanded="true" />
+            <element signature="e#5059#5060#0" expanded="true" />
+            <element signature="e#5191#5192#0" expanded="true" />
+            <element signature="e#5266#5267#0" expanded="true" />
+            <element signature="e#5304#5305#0" expanded="true" />
+            <element signature="e#5379#5380#0" expanded="true" />
+            <element signature="e#5413#5414#0" expanded="true" />
+            <element signature="e#5488#5489#0" expanded="true" />
+            <element signature="e#5523#5524#0" expanded="true" />
+            <element signature="e#5598#5599#0" expanded="true" />
           </folding>
         </state>
       </provider>
