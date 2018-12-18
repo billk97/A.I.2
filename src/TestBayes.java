@@ -17,7 +17,6 @@ public class TestBayes {
         }
         return false;
     }// end checkSpam
-
     /**
      * this function loads the Training data
      * (loads the propabilites in  a hashMap type double[]
