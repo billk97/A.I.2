@@ -1,6 +1,12 @@
 import javax.naming.ldap.PagedResultsControl;
+
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,42 +20,78 @@ public class ReadB {
     private int SpamCounter;
     private int HammCounter;
     private double TrueFalse[] = {0.0, 0.0, 0.0, 0.0};
-    /**this function loads the Training data
+
+    /**
+     * this function loads the Training data
      * (loads the propabilites in  a hashMap type double[]
-     * called MailHash) this function loads the Testing data**/
+     * called MailHash) this function loads the Testing data
+     **/
     public void ReadMail() throws FileNotFoundException {
-        String path = "src\\pu_corpora_public\\pu1\\part";
-        inputToHashMap(path, 1);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 2);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 3);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 4);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 5);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 6);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 7);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 8);
-        CalculateTest(path);
-        System.out.println("==================");
-        inputToHashMap(path, 9);
-        CalculateTest(path);
-        System.out.println("==================");
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream("filename.txt"), "utf-8"));
+
+
+            String path = "src\\pu_corpora_public\\pu1\\part";
+            inputToHashMap(path, 1);
+            CalculateTest(path);
+            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
+            ((BufferedWriter) writer).newLine();
+            System.out.println("==================");
+            inputToHashMap(path, 2);
+            CalculateTest(path);
+            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
+            ((BufferedWriter) writer).newLine();
+            System.out.println("==================");
+            inputToHashMap(path, 3);
+            CalculateTest(path);
+            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
+            ((BufferedWriter) writer).newLine();
+            System.out.println("==================");
+            inputToHashMap(path, 4);
+            CalculateTest(path);
+            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
+            ((BufferedWriter) writer).newLine();
+            System.out.println("==================");
+            inputToHashMap(path, 5);
+            CalculateTest(path);
+            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
+            ((BufferedWriter) writer).newLine();
+            System.out.println("==================");
+            inputToHashMap(path, 6);
+            CalculateTest(path);
+            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
+            ((BufferedWriter) writer).newLine();
+            System.out.println("==================");
+            inputToHashMap(path, 7);
+            CalculateTest(path);
+            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
+            ((BufferedWriter) writer).newLine();
+            System.out.println("==================");
+            inputToHashMap(path, 8);
+            CalculateTest(path);
+            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
+            ((BufferedWriter) writer).newLine();
+            System.out.println("==================");
+            inputToHashMap(path, 9);
+            CalculateTest(path);
+            writer.write((SpamCounter + HammCounter) + " " + Accuracy());
+            ((BufferedWriter) writer).newLine();
+            System.out.println("==================");
+        } catch (IOException ex) {
+            // Report
+        } finally {
+            try {
+                writer.close();
+            } catch (Exception ex) {/*ignore*/}
+        }
     }
-    /**this function inputs all the data from the txt
+
+    /**
+     * this function inputs all the data from the txt
      * into a HashMap
-     * **/
+     **/
     private void inputToHashMap(String path, int posost) throws FileNotFoundException {
         MailHash = new HashMap<Integer, Double[]>();
         SpamCounter = 0;
@@ -130,7 +172,6 @@ public class ReadB {
             MailHash.get(lexi)[1] = Math.log(1.0 + (MailHash.get(lexi)[1] / (double) HammCounter));
         }
     }
-
 
 
     public double getSpamPropability() {
