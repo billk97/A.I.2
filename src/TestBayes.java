@@ -27,12 +27,12 @@ public class TestBayes {
         try {
             writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream("filename.txt"), "utf-8"));
-            String path = "src\\pu_corpora_public\\pu1\\part";
+            String path = "src\\pu_corpora_public\\pu3\\part";
             for(int i=1; i<10; i++)
             {
                 biData.inputToHashMap(path, i);
                 CalculateTest(path);
-                writer.write((biData.SpamCounter + biData.HammCounter) + " " + biData.Accuracy());
+                writer.write((biData.SpamCounter + biData.HammCounter) + " " + Double.toString(biData.Accuracy()).replace(".",","));
                 ((BufferedWriter) writer).newLine();
                 System.out.println("==================");
             }
