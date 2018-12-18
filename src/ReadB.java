@@ -1,5 +1,3 @@
-import javax.naming.ldap.PagedResultsControl;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,12 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
-
-import static jdk.nashorn.internal.objects.NativeMath.round;
 
 public class ReadB {
     private HashMap<Integer, Double[]> MailHash;
@@ -123,12 +118,20 @@ public class ReadB {
                 }//end while
                 if (checkSpam(file)) {//if its spam
                     /**increases the SpamCounter if the word is found in a Spam mail **/
+                    /**loops all the tempSet which contains
+                     * unique word **/
                     for (int k : tempSet) {
                         if (MailHash.containsKey(k)) {
-
+                            /**checks if the (word)=k that is contained in the mail
+                             * exists in the known words or dictionary
+                             * and ads an counter which means that the word is found
+                             * at least 1 time**/
                             MailHash.get(k)[0] += 1;
 
                         } else {
+                            /**if (word)=k does not exists it create on
+                             * which contains 1 table 1 column for the number of spam
+                             * 1 for the number of ham**/
                             MailHash.put(k, new Double[]{0.0, 0.0});
                             MailHash.get(k)[0] += 1;
                         }
@@ -148,40 +151,46 @@ public class ReadB {
             }
 
         }
+        Laplace();
+        Probability();
+        System.out.println("SpamCounter: " + SpamCounter + " HammCounter: " + HammCounter);
+        System.out.println("Counter: " + (SpamCounter + HammCounter));
+    }
+    private void Laplace()
+    {
         for (int lexi : MailHash.keySet()) {
             MailHash.get(lexi)[0]++;
             MailHash.get(lexi)[1]++;
         }
         SpamCounter += 2;
         HammCounter += 2;
-        Propability();
-        System.out.println("SpamCounter: " + SpamCounter + " HammCounter: " + HammCounter);
-        System.out.println("Counter: " + (SpamCounter + HammCounter));
-    }
-
+    }//end Laplace
+    /**checks if the given file is spam or ham based on the Title**/
     private boolean checkSpam(File dir) throws FileNotFoundException {
         if (dir.getName().contains("spmsg")) {
             return true;
         }
         return false;
-    }
+    }// end checkSpam
 
-    private void Propability() {
+    /**calculates the probability of each mail to be spam or ham
+     * based on the bayes algorithm **/
+    private void Probability() {
         for (int lexi : MailHash.keySet()) {
             MailHash.get(lexi)[0] = Math.log(1.0 + (MailHash.get(lexi)[0] / (double) SpamCounter));
             MailHash.get(lexi)[1] = Math.log(1.0 + (MailHash.get(lexi)[1] / (double) HammCounter));
         }
-    }
+    }// end Propability
 
-
+    /**this function returns probability the mail to be Spam**/
     public double getSpamPropability() {
         return (double) SpamCounter / ((double) SpamCounter + (double) HammCounter);
     }
-
+    /**this function returns probability the mail to be Ham**/
     public double getHamPropability() {
         return 1.0 - getSpamPropability();
     }
-
+    /**this function loads and checks how the good the algorithm does in unknown data**/
     public void CalculateTest(String path) throws FileNotFoundException {
         TrueFalse[0] = 0.0;
         TrueFalse[1] = 0.0;
