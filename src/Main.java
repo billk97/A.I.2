@@ -11,6 +11,8 @@ public class Main {
         Id3Data id3Data =new Id3Data();
         id3Data.inputToHashMap("src\\pu_corpora_public\\pu3\\part",8);
 
+
+
     }
 
 
