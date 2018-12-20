@@ -12,6 +12,7 @@ public class Main {
        //id3Data.inputToHashMap("src\\pu_corpora_public\\pu3\\part",8);
         Id3Impl id3= new Id3Impl();
         id3.Initializer();
+
     }
 
 
