@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
 
 public class Id3Impl {
     public HashMap<Integer, Double[]> wordHash;
@@ -11,13 +9,17 @@ public class Id3Impl {
     private double spamCounter=0.0;
     private double hamCounter=0.0;
     double MailCounter=0.0;
+    double[][]  IgTable ;
 
     public void Initializer () throws FileNotFoundException {
         fillWordHash();
         fillNonFoundWords();
         laplace();
         addIG();
-        printHash();
+        InputToIgTable();
+        //printHash();
+        SortIgTable();
+        PrintIgTable();
         System.out.println("entropy = "+ TotalEntropy());
 
     }//endInitializer
@@ -124,11 +126,9 @@ public class Id3Impl {
         }
     }
 
-
     private double IG(int word){
         double PwordFound=(wordHash.get(word)[0]+wordHash.get(word)[1])/MailCounter;
         double PwordNonFound=(wordHash.get(word)[2]+wordHash.get(word)[3])/MailCounter;
-
         return TotalEntropy()-(PwordFound*Entropy(word,1)+PwordNonFound*Entropy(word,0));
     }
 
@@ -136,7 +136,7 @@ public class Id3Impl {
         for(int k: wordHash.keySet()){
             wordHash.get(k)[4]=IG(k);
         }
-    }
+    }//end addIG
 
     private void laplace(){
         for(int k:wordHash.keySet()){
@@ -146,6 +146,36 @@ public class Id3Impl {
         spamCounter+=2;
         hamCounter+=2;
         MailCounter+=4;
+    }//end laplace
+    private void InputToIgTable()
+    {
+        IgTable = new double[wordHash.size()][2];
+        System.out.println("lentgh" +IgTable.length);
+        int i=0;
+        for(int k :wordHash.keySet())
+        {
+           IgTable[i][0]=(double)k;
+           IgTable[i][1]=wordHash.get(k)[4];
+           i++;
+        }
+
     }
+    private void SortIgTable()
+    {
+        //bubbleSort(IgTable);
+       Sort2Table sort = new Sort2Table();
+       sort.bubbleSort(IgTable);
+
+    }
+
+    private void PrintIgTable()
+    {
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 2; j++)
+                System.out.print(IgTable[i][j] + " ");
+            System.out.println();
+        }
+    }
+
 
 }//endImpl
