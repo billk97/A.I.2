@@ -11,11 +11,16 @@ public class Id3Impl {
     public String path= "src\\pu_corpora_public\\pu3\\part";
     private int spamCounter=0;
     private int hamCounter=0;
+    int MailCounter=0;
 
-
-    public void fillWordHash() throws FileNotFoundException {
+    public void Initializer () throws FileNotFoundException {
+        fillWordHash();
+        fillNonFoundWords();
+        printHash();
+    }//endInitializer
+    /**wordHash=[hamfound,Spamfound,hamNotFound,SpamNotFound]**/
+    private void fillWordHash() throws FileNotFoundException {
         wordHash=new HashMap<Integer, Integer[]>();
-        int MailCounter=0;
         /**loops all the directories until  8**/
         for (int i = 1; i <= 8; i++) {
             String localPath = path + Integer.toString(i);
@@ -49,21 +54,19 @@ public class Id3Impl {
                             wordHash.put(k,new Integer[]{0,1,0,0});
                         }//word found in ham mail
                     }
-                }
+                }//end else
                 scanner.close();
             }//end for
         }//end for
     }//end fillWordHash
-
-    public void fillNonFoundWords(){
+    /**fills the table with the number of **/
+    private void fillNonFoundWords(){
         for(int k: wordHash.keySet()){
             wordHash.get(k)[2]=hamCounter-wordHash.get(k)[0];
             wordHash.get(k)[3]=spamCounter-wordHash.get(k)[1];
         }
 
     }
-
-
 
     private boolean checkSpam(File dir) throws FileNotFoundException {
         if (dir.getName().contains("spmsg")) {
@@ -72,12 +75,10 @@ public class Id3Impl {
         return false;
     }
 
-    public void printHash(){
+    private void printHash(){
         for(int k: wordHash.keySet()){
-            System.out.println("word possibilities are ="+wordHash.get(k)[0]+" "+wordHash.get(k)[1]+" "+wordHash.get(k)[2]+" "+wordHash.get(k)[3]);
+            System.out.println("word "+k+ " possibilities are = "+wordHash.get(k)[0]+" "+wordHash.get(k)[1]+" "+wordHash.get(k)[2]+" "+wordHash.get(k)[3]);
         }
+        System.out.println("email counter ="+MailCounter);
     }
-
-
-
-}
+}//endImpl

@@ -10,15 +10,8 @@ public class Main {
       // testBayes.WriteTxt();
         //Id3Data id3Data =new Id3Data();
        //id3Data.inputToHashMap("src\\pu_corpora_public\\pu3\\part",8);
-
         Id3Impl id3= new Id3Impl();
-        id3.fillWordHash();
-        id3.fillNonFoundWords();
-        id3.printHash();
-
-
-
-
+        id3.Initializer();
     }
 
 
