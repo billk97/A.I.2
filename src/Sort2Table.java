@@ -4,9 +4,10 @@ class Sort2Table {
         int n = arr.length;
         double temp = 0.0;
         double temp1 = 0.0;
+        double temp2 =0.0;
         for(int i=0; i < n; i++){
             for(int j=1; j < (n-i); j++){
-                if(arr[j-1][1] < arr[j][1]){
+                if(arr[j-1][2] < arr[j][2]){
                     //swap elements
                     temp = arr[j-1][1];
                     arr[j-1][1] = arr[j][1];
@@ -15,6 +16,10 @@ class Sort2Table {
                     temp1 = arr[j-1][0];
                     arr[j-1][0] = arr[j][0];
                     arr[j][0] = temp1;
+
+                    temp2 = arr[j-1][2];
+                    arr[j-1][2] = arr[j][2];
+                    arr[j][2] = temp2;
                 }
 
             }

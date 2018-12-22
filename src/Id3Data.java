@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Id3Data {
     public HashMap<Integer, Integer[]> MailHash;
     public HashSet<Integer> tempSet;
-    private  int [] words ;
+    double   [][] words ; //[lexi,thesi,ig]
     public int [][] MainTable;
     private String path = "src\\pu_corpora_public\\pu3\\part";
     private int MailCounter;
@@ -29,6 +29,7 @@ public class Id3Data {
         Ckeck2DTableSH();
         System.out.println("Total Entropy:  "+TotalEntropy());
         AddIgToTable();
+        //SortIgTable();
         PrintIgTable();
     }
     /**this function creates the vocabulary **/
@@ -92,10 +93,11 @@ public class Id3Data {
     public void HashWordToTable()
     {
         int count=0;
-        words=new int[MailHash.size()];
+        words=new double[MailHash.size()][3];
         for(int lexi :MailHash.keySet())
         {
-            words[count]=lexi;
+            words[count][0]=lexi;
+            words[count][1]=count;
            // System.out.println("count: "+count+" : "+ words[count]);
             count++;
         }
@@ -142,7 +144,7 @@ public class Id3Data {
     {
         for(int i=0; i< words.length; i++)
         {
-            if(TempMailWords.contains(words[i]))
+            if(TempMailWords.contains((int)words[i][0]))
             {
                 MainTable[Mails][i]=1;
             }
@@ -236,19 +238,23 @@ public class Id3Data {
     }
     private void AddIgToTable()
     {
-        IgTable = new double[MainTable[0].length];
         for(int i=0; i< MainTable[0].length ; i++)
         {
-            IgTable[i]=IG(i);
+            words[i][2]=IG(i);
         }
     }
     private void PrintIgTable()
     {
-        for(int i=0; i<IgTable.length; i++)
+        for(int i=0; i<words.length; i++)
         {
-            System.out.println("IgTable i: "+ words[i] +" IgTable: " + IgTable[i] );
-
+            System.out.println("word lexi: "+ words[i][0] +" word id: " + words[i][1] + " word Ig: " + words[i][2]  );
         }
+    }
+    private void SortIgTable()
+    {
+        //bubbleSort(IgTable);
+        Sort2Table sort = new Sort2Table();
+        sort.bubbleSort(words);
     }
 
 }

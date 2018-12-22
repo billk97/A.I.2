@@ -164,7 +164,6 @@ public class Id3Impl {
         //bubbleSort(IgTable);
        Sort2Table sort = new Sort2Table();
        sort.bubbleSort(IgTable);
-
     }
 
     private void PrintIgTable()
