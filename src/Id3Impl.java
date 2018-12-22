@@ -109,7 +109,6 @@ public class Id3Impl {
     private double TotalEntropy(){
         //System.out.println("SpamProbability: "+getSpamProp()+" HamProbability: "+getHamProp() );
         //System.out.println("logSpamProbability: "+log2(getSpamProp())+" logHamProbability: "+log2(getHamProp()) );
-
         return -(getSpamProp()*log2(getSpamProp())+getHamProp()*log2(getHamProp()));
     }
 

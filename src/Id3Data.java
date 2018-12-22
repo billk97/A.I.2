@@ -13,8 +13,9 @@ public class Id3Data {
     private String path = "src\\pu_corpora_public\\pu3\\part";
     private int MailCounter;
     private  int TrainingDataNumber=8;
-    private int SpamCounter=0;
-    private int HamCounter=0;
+    private double SpamCounter=0.0;
+    private double HamCounter=0.0;
+    private double IgTable[];
     /**
      * this function inputs all the data from the txt
      * into a HashMap
@@ -23,9 +24,12 @@ public class Id3Data {
         inputToHashMap(path,TrainingDataNumber);
         HashWordToTable();
         ReadMail(MailCounter,TrainingDataNumber,path);
-        PrintMainTable();
+        //PrintMainTable();
         System.out.println("SpamCounter: "+ SpamCounter + " HamCounter: "+ HamCounter + " = MailCounter: "+ MailCounter);
         Ckeck2DTableSH();
+        System.out.println("Total Entropy:  "+TotalEntropy());
+        AddIgToTable();
+        PrintIgTable();
     }
     /**this function creates the vocabulary **/
     public void inputToHashMap(String path, int TrainingDataNumber) throws FileNotFoundException {
@@ -183,7 +187,7 @@ public class Id3Data {
                     Spam++;
                 }
         }
-        System.out.println("Spam: "+ Spam + " Ham: " + Ham);
+        // System.out.println("Spam: "+ Spam + " Ham: " + Ham);
         return  Spam;
     }
 
@@ -203,7 +207,48 @@ public class Id3Data {
     private double TotalEntropy(){
         //System.out.println("SpamProbability: "+getSpamProp()+" HamProbability: "+getHamProp() );
         //System.out.println("logSpamProbability: "+log2(getSpamProp())+" logHamProbability: "+log2(getHamProp()) );
-
         return -(getSpamProp()*log2(getSpamProp())+getHamProp()*log2(getHamProp()));
     }
+    private double WordProbapility(int lexi,int Exist , int Category )
+    {
+        double WordExists = 0.0;
+        double CategoryPerWord=0.0;
+        for(int i=0; i<MainTable.length; i++)
+        {
+            if(MainTable[i][lexi]==Exist && MainTable[i][MainTable[0].length-1]==Category)
+            {
+                CategoryPerWord++;
+            }
+            if(MainTable[i][lexi]==Exist)
+            {
+                WordExists++;
+            }
+        }
+        return CategoryPerWord/WordExists;
+    }
+    private double IG(int lexi)
+    {
+        double p1 = WordProbapility(lexi,0,0)*log2(1+WordProbapility(lexi,0,0));
+        double p2 = WordProbapility(lexi,0,1)*log2(1+WordProbapility(lexi,0,1));
+        double p3 = WordProbapility(lexi,1,0)*log2(1+WordProbapility(lexi,1,0));
+        double p4 = WordProbapility(lexi,1,1)*log2(1+WordProbapility(lexi,1,1));
+        return  TotalEntropy()+(p1+p2+p3+p4);
+    }
+    private void AddIgToTable()
+    {
+        IgTable = new double[MainTable[0].length];
+        for(int i=0; i< MainTable[0].length ; i++)
+        {
+            IgTable[i]=IG(i);
+        }
+    }
+    private void PrintIgTable()
+    {
+        for(int i=0; i<IgTable.length; i++)
+        {
+            System.out.println("IgTable i: "+ words[i] +" IgTable: " + IgTable[i] );
+
+        }
+    }
+
 }

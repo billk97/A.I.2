@@ -10,6 +10,8 @@ public class Main {
 //       testBayes.WriteTxt();
         Id3Data id3Data =new Id3Data();
         id3Data.Initializer();
+//        Id3Impl id3 = new Id3Impl();
+//        id3.Initializer();
 
     }
 
