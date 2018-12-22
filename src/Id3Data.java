@@ -252,9 +252,58 @@ public class Id3Data {
     }
     private void SortIgTable()
     {
-        //bubbleSort(IgTable);
         Sort2Table sort = new Sort2Table();
         sort.bubbleSort(words);
     }
 
+    private void ID3Algorithm(String path) throws FileNotFoundException {
+        String localPath = path + Integer.toString(10);
+        File dir = new File(localPath);
+        for (File file : dir.listFiles())
+        {
+            //todo balto se methodo
+            tempSet = new HashSet<Integer>();
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNext()) {
+                String word = scanner.next();
+                if (!word.equals("Subject:")) {
+                    int cell = Integer.parseInt(word);
+                    tempSet.add(cell);
+                }
+            }//end while
+            for( int i =0;  i< words.length ; i++)
+            {
+                int foundcounter=0;
+                int nonfoundcounter=0;
+                int spamcounter=0;
+                int hamcounter=0;
+                if(tempSet.contains(words[i][0]))
+                {
+                    for(int j=0;j<MainTable.length;j++) {
+                        if (MainTable[j][i] == 1) {
+                            foundcounter++;
+                            if (MainTable[j][MainTable[0].length - 1] == 0) {
+                                spamcounter++;
+                            } else {
+                                hamcounter++;
+                            }
+                        }
+                    }
+
+
+                }else{
+                    for(int j=0;j<MainTable.length;j++) {
+                        if (MainTable[j][i] == 0) {
+                            nonfoundcounter++;
+                            if (MainTable[j][MainTable[0].length - 1] == 0) {
+                                spamcounter++;
+                            } else {
+                                hamcounter++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
