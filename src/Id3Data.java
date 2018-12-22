@@ -6,36 +6,34 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class Id3Data {
-    public HashMap<Integer, Integer[]> MailHash;
-    public HashSet<Integer> tempSet;
-    double   [][] words ; //[lexi,thesi,ig]
-    public int [][] MainTable;
+    public HashMap<Integer, Integer[]> MailHash= new HashMap<Integer, Integer[]>();//contains the vocabulary
+    public HashSet<Integer> tempSet; //contains the vocabulary of each mail at the time
+    double[][] words; //[lexi,thesi,ig] just like a pointer table
+    public int[][] MainTable;//contains all the mails in a vector form <0,1,0,1,0,1,0,1,0,0>
     private String path = "src\\pu_corpora_public\\pu3\\part";
     private int MailCounter;
-    private  int TrainingDataNumber=8;
-    private double SpamCounter=0.0;
-    private double HamCounter=0.0;
+    private int TrainingDataNumber = 8;
+    private double SpamCounter = 0.0;
+    private double HamCounter = 0.0;
     private double IgTable[];
-    /**
-     * this function inputs all the data from the txt
-     * into a HashMap
-     **/
-    public  void Initializer() throws FileNotFoundException {
-        inputToHashMap(path,TrainingDataNumber);
+    /**this function inputs all the data from the txt
+     * into a HashMap**/
+    public void Initializer() throws FileNotFoundException {
+        inputToHashMap(path, TrainingDataNumber);
+        Pruning();
         HashWordToTable();
-        ReadMail(MailCounter,TrainingDataNumber,path);
+        Read(MailCounter, TrainingDataNumber, path);
         //PrintMainTable();
-        System.out.println("SpamCounter: "+ SpamCounter + " HamCounter: "+ HamCounter + " = MailCounter: "+ MailCounter);
+        System.out.println("SpamCounter: " + SpamCounter + " HamCounter: " + HamCounter + " = MailCounter: " + MailCounter);
         Ckeck2DTableSH();
-        System.out.println("Total Entropy:  "+TotalEntropy());
         AddIgToTable();
-        //SortIgTable();
+        SortIgTable();
         PrintIgTable();
     }
-    /**this function creates the vocabulary **/
+
+    /**this function creates the vocabulary**/
     public void inputToHashMap(String path, int TrainingDataNumber) throws FileNotFoundException {
-        MailHash = new HashMap<Integer, Integer[]>();
-        MailCounter=0;
+        MailCounter = 0;
         /**loops all the directories until  8**/
         for (int i = 1; i <= TrainingDataNumber; i++) {
             String localPath = path + Integer.toString(i);
@@ -43,126 +41,113 @@ public class Id3Data {
             /**lops all the files**/
             for (File file : dir.listFiles()) {
                 MailCounter++;
-                tempSet = new HashSet<Integer>();
-                Scanner scanner = new Scanner(file);
-                while (scanner.hasNext()) {
-                    String word = scanner.next();//inputs every word in a local variable
-                    if (!word.equals("Subject:")) {//checks if its not Subject otherwise sketchy things may happen
-                        int lexi =Integer.parseInt(word);
-                        tempSet.add(lexi);
-                    }//end if
-                }//end while
-                scanner.close();
+                ReadMail(file);
                 UpdateMailHash();
             }//end for2
         }//end for1
+    }//end input To HashMap
+    /**reduces the vocabulary keeps the most important words**/
+    private void Pruning()
+    {
         Iterator<Integer> it = MailHash.keySet().iterator();
-        while (it.hasNext())
-        {
-            int onoma=it.next();
-            if(MailHash.get(onoma)[0]<3||MailHash.get(onoma)[0]>2000)
-            {
+        while (it.hasNext()) {
+            int onoma = it.next();
+            if (MailHash.get(onoma)[0] < 3 || MailHash.get(onoma)[0] > 2000) {
                 it.remove();
             }
         }//end while
-        System.out.println("Mailhash: "+ MailHash.size());
-    }//end input To HashMap
+    }
     /**this function Updates the MailHash HashMap
-     * and increases the counter when an word is found in a email **/
-    private void UpdateMailHash()
-    {
-        /**loops all the tempSet which contains
-         * unique word **/
+     * and increases the counter when an word is found in a email
+     * loops all the tempSet which contains
+     * unique word
+     **/
+    /**checks if the (word)=k that is contained in the mail
+     * exists in the known words or dictionary
+     * and ads an counter which means that the word is found
+     * at least 1 time**/
+    /**if (word)=k does not exists it create on
+     * which contains 1 table 1 column for the number of spam
+     * 1 for the number of ham**/
+    private void UpdateMailHash() {
         for (int k : tempSet) {
-            /**checks if the (word)=k that is contained in the mail
-             * exists in the known words or dictionary
-             * and ads an counter which means that the word is found
-             * at least 1 time**/
             if (MailHash.containsKey(k)) {
                 MailHash.get(k)[0] += 1;
             } else {
-                /**if (word)=k does not exists it create on
-                 * which contains 1 table 1 column for the number of spam
-                 * 1 for the number of ham**/
                 MailHash.put(k, new Integer[]{1});
             }
         }//end for
     }//end UpdateMailHash
     /**this function keeps track of the words in the main table each
-     * word has a unique number **/
-    public void HashWordToTable()
-    {
-        int count=0;
-        words=new double[MailHash.size()][3];
-        for(int lexi :MailHash.keySet())
-        {
-            words[count][0]=lexi;
-            words[count][1]=count;
-           // System.out.println("count: "+count+" : "+ words[count]);
+     * word has a unique number**/
+    public void HashWordToTable() {
+        int count = 0;
+        words = new double[MailHash.size()][3];
+        for (int lexi : MailHash.keySet()) {
+            words[count][0] = lexi;
+            words[count][1] = count;
             count++;
         }
-        System.out.println("Mailhash: "+ MailHash.size() + " count: "+ count);
+        System.out.println("Mailhash: " + MailHash.size() + " count: " + count);
     }//end HashWordToTable
 
-    private void ReadMail(int TotalMails,int posost,String path) throws FileNotFoundException {
-        System.out.println("Total Mails: " + TotalMails +" Words.length " + words.length);
-        MainTable= new int [TotalMails][words.length];
-        HashSet <Integer> MailWords;
-        int MailCounter=0;
+    private void Read(int TotalMails, int posost, String path) throws FileNotFoundException {
+        System.out.println("Total Mails: " + TotalMails + " Words.length " + words.length);
+        MainTable = new int[TotalMails][words.length];
+        HashSet<Integer> MailWords;
+        int MailCounter = 0;
         /**loops all the directories until  8**/
         for (int i = 1; i <= posost; i++) {
             String localPath = path + Integer.toString(i);
             File dir = new File(localPath);
             /**lops all the files**/
             for (File file : dir.listFiles()) {
-
-                 MailWords = new HashSet<Integer>();
+                MailWords = new HashSet<Integer>();
                 Scanner scanner = new Scanner(file);
                 while (scanner.hasNext()) {
                     String word = scanner.next();//inputs every word in a local variable
                     if (!word.equals("Subject:")) {//checks if its not Subject otherwise sketchy things may happen
-                        int lexi =Integer.parseInt(word);
+                        int lexi = Integer.parseInt(word);
                         MailWords.add(lexi);
                     }//end if
                 }//end while
                 scanner.close();
-                if(checkSpam(file))
-                {
+                if (checkSpam(file)) {
                     SpamCounter++;
-                    InputToMainTable(MailCounter,MailWords,0);
-                }else
-                    {
-                        HamCounter++;
-                        InputToMainTable(MailCounter,MailWords,1);
-                    }
+                    InputToMainTable(MailCounter, MailWords, 0);
+                } else {
+                    HamCounter++;
+                    InputToMainTable(MailCounter, MailWords, 1);
+                }
                 MailCounter++;
             }//end for2
         }//end for1
     }
+
     /**this function inputs the data from the Hash Table to the 2 dimensional table**/
-    public void InputToMainTable(int Mails,HashSet<Integer> TempMailWords,int SpamORham)
-    {
-        for(int i=0; i< words.length; i++)
-        {
-            if(TempMailWords.contains((int)words[i][0]))
-            {
-                MainTable[Mails][i]=1;
+    public void InputToMainTable(int Mails, HashSet<Integer> TempMailWords, int SpamORham) {
+        for (int i = 0; i < words.length; i++) {
+            if (TempMailWords.contains((int) words[i][0])) {
+                MainTable[Mails][i] = 1;
             }
         }
-        MainTable[Mails][words.length-1]=SpamORham;
-        //System.out.println("words.length-1: " + (words.length-1));
+        MainTable[Mails][words.length - 1] = SpamORham;
     }
-    private void PrintMainTable()
-    {
-        for(int i=0; i<MainTable.length ; i++)
-        {
-            for (int j =0; j<MainTable[i].length; j++)
-            {
+
+    private void PrintMainTable() {
+        for (int i = 0; i < MainTable.length; i++) {
+            for (int j = 0; j < MainTable[i].length; j++) {
                 System.out.print(MainTable[i][j] + " ");
             }
             System.out.println("");
         }
     }
+    private void PrintIgTable() {
+        for (int i = 0; i < words.length; i++) {
+            System.out.println("word lexi: " + words[i][0] + " word id: " + words[i][1] + " word Ig: " + words[i][2]);
+        }
+    }
+
     /**checks if the given file is spam or ham based on the Title**/
     private boolean checkSpam(File dir) throws FileNotFoundException {
         if (dir.getName().contains("spmsg")) {
@@ -170,98 +155,61 @@ public class Id3Data {
         }
         return false;
     }// end checkSpam
+
     /**in order to take the number of rows
      * MainTable.length =3304 = number of emails
      * MainTable[0].length =16693 = number of words
-     * MainTable[i][MainTable[0].length-1] = 0 or 1 **/
-    private int Ckeck2DTableSH()
-    {
-        int Spam=0;
-        int Ham =0;
-        for(int i =0; i<MainTable.length; i++)
-        {
-            if(MainTable[i][MainTable[0].length-1] == 1)
-            {
+     * MainTable[i][MainTable[0].length-1] = 0 or 1**/
+    private int Ckeck2DTableSH() {
+        int Spam = 0;
+        int Ham = 0;
+        for (int i = 0; i < MainTable.length; i++) {
+            if (MainTable[i][MainTable[0].length - 1] == 1) {
                 Ham++;
+            } else {
+                Spam++;
             }
-            else
-                {
-                    Spam++;
-                }
         }
-        // System.out.println("Spam: "+ Spam + " Ham: " + Ham);
-        return  Spam;
+        return Spam;
     }
 
-    public double log2(double n)
-    {
-        return (Math.log(n) / Math.log(2));
-    }
-
-    private double getSpamProp(){
-        return SpamCounter/MailCounter;
-    }
-
-    private double getHamProp(){
-        return 1-getSpamProp();
-    }
-
-    private double TotalEntropy(){
-        //System.out.println("SpamProbability: "+getSpamProp()+" HamProbability: "+getHamProp() );
-        //System.out.println("logSpamProbability: "+log2(getSpamProp())+" logHamProbability: "+log2(getHamProp()) );
-        return -(getSpamProp()*log2(getSpamProp())+getHamProp()*log2(getHamProp()));
-    }
-    private double WordProbapility(int lexi,int Exist , int Category )
-    {
+    private double WordProbapility(int lexi, int Exist, int Category) {
         double WordExists = 0.0;
-        double CategoryPerWord=0.0;
-        for(int i=0; i<MainTable.length; i++)
-        {
-            if(MainTable[i][lexi]==Exist && MainTable[i][MainTable[0].length-1]==Category)
-            {
+        double CategoryPerWord = 0.0;
+        for (int i = 0; i < MainTable.length; i++) {
+            if (MainTable[i][lexi] == Exist && MainTable[i][MainTable[0].length - 1] == Category) {
                 CategoryPerWord++;
             }
-            if(MainTable[i][lexi]==Exist)
-            {
+            if (MainTable[i][lexi] == Exist) {
                 WordExists++;
             }
         }
-        return CategoryPerWord/WordExists;
+        return CategoryPerWord / WordExists;
     }
-    private double IG(int lexi)
-    {
-        double p1 = WordProbapility(lexi,0,0)*log2(1+WordProbapility(lexi,0,0));
-        double p2 = WordProbapility(lexi,0,1)*log2(1+WordProbapility(lexi,0,1));
-        double p3 = WordProbapility(lexi,1,0)*log2(1+WordProbapility(lexi,1,0));
-        double p4 = WordProbapility(lexi,1,1)*log2(1+WordProbapility(lexi,1,1));
-        return  TotalEntropy()+(p1+p2+p3+p4);
+    private double IG(int lexi) {
+        Calculate cal = new Calculate();
+        cal.setSpamCounter(SpamCounter);
+        cal.setMailCounter(MailCounter);
+        double p1 = WordProbapility(lexi, 0, 0) * cal.log2(1 + WordProbapility(lexi, 0, 0));
+        double p2 = WordProbapility(lexi, 0, 1) * cal.log2(1 + WordProbapility(lexi, 0, 1));
+        double p3 = WordProbapility(lexi, 1, 0) * cal.log2(1 + WordProbapility(lexi, 1, 0));
+        double p4 = WordProbapility(lexi, 1, 1) * cal.log2(1 + WordProbapility(lexi, 1, 1));
+        return cal.TotalEntropy() + (p1 + p2 + p3 + p4);
     }
-    private void AddIgToTable()
-    {
-        for(int i=0; i< MainTable[0].length ; i++)
-        {
-            words[i][2]=IG(i);
+
+    private void AddIgToTable() {
+        for (int i = 0; i < MainTable[0].length; i++) {
+            words[i][2] = IG(i);
         }
     }
-    private void PrintIgTable()
-    {
-        for(int i=0; i<words.length; i++)
-        {
-            System.out.println("word lexi: "+ words[i][0] +" word id: " + words[i][1] + " word Ig: " + words[i][2]  );
-        }
-    }
-    private void SortIgTable()
-    {
+    private void SortIgTable() {
         Sort2Table sort = new Sort2Table();
         sort.bubbleSort(words);
     }
 
-    private void ID3Algorithm(String path) throws FileNotFoundException {
+    private void ReadMail(File file) throws FileNotFoundException {
         String localPath = path + Integer.toString(10);
         File dir = new File(localPath);
-        for (File file : dir.listFiles())
-        {
-            //todo balto se methodo
             tempSet = new HashSet<Integer>();
             Scanner scanner = new Scanner(file);
             while (scanner.hasNext()) {
@@ -271,28 +219,32 @@ public class Id3Data {
                     tempSet.add(cell);
                 }
             }//end while
-            for( int i =0;  i< words.length ; i++)
-            {
-                int foundcounter=0;
-                int nonfoundcounter=0;
-                int spamcounter=0;
-                int hamcounter=0;
-                if(tempSet.contains(words[i][0]))
-                {
-                    for(int j=0;j<MainTable.length;j++) {
+        scanner.close();
+    }//end ReadMail
+
+    private void ID3Algorithm(String path) throws FileNotFoundException {
+        String localPath = path + Integer.toString(10);
+        File dir = new File(localPath);
+        for (File file : dir.listFiles()) {
+            ReadMail(file);
+            for (int i = 0; i < words.length; i++) {
+                int foundcounter = 0;
+                int nonfoundcounter = 0;
+                int spamcounter = 0;
+                int hamcounter = 0;
+                if (tempSet.contains(words[i][0])) {
+                    for (int j = 0; j < MainTable.length; j++) {
                         if (MainTable[j][i] == 1) {
                             foundcounter++;
                             if (MainTable[j][MainTable[0].length - 1] == 0) {
                                 spamcounter++;
                             } else {
                                 hamcounter++;
-                            }
-                        }
-                    }
-
-
-                }else{
-                    for(int j=0;j<MainTable.length;j++) {
+                            }//end if
+                        }//end //if
+                    }//end for
+                } else {
+                    for (int j = 0; j < MainTable.length; j++) {
                         if (MainTable[j][i] == 0) {
                             nonfoundcounter++;
                             if (MainTable[j][MainTable[0].length - 1] == 0) {
@@ -300,10 +252,10 @@ public class Id3Data {
                             } else {
                                 hamcounter++;
                             }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
+                        }//end if 1
+                    }//end for3
+                }// end else1
+            }//end for 2
+        }//end for1
+    }// end ID3Algorithm
+}//end class
