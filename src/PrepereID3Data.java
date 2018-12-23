@@ -106,7 +106,10 @@ public class PrepereID3Data {
         }
         System.out.println("Mailhash: " + MailHash.size() + " count: " + count);
     }//end HashWordToTable
-
+    /**this function is responsible for inputting the all the mails in a single table
+     * example
+     * <0,0,0,0,1,1,1,0>
+     * <0,0,0,0,1,1,1,0>**/
     private void Read(int TotalMails, int posost, String path) throws FileNotFoundException {
         System.out.println("Total Mails: " + TotalMails + " Words.length " + words.length);
         MainTable = new int[TotalMails][words.length];
@@ -171,6 +174,7 @@ public class PrepereID3Data {
         }//end while
         scanner.close();
     }//end ReadMail
+    /**this function prints the main table**/
     private void PrintMainTable() {
         for (int i = 0; i < MainTable.length; i++) {
             for (int j = 0; j < MainTable[i].length; j++) {
