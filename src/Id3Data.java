@@ -10,6 +10,7 @@ public class Id3Data {
     int MailNotExist=0;
     int SpamNotExist=0;
     int HamNotExist=0;
+    int TotalMails=0;
     /**this function inputs all the data from the txt
      * into a HashMap adds the to a table shorts them and prints them
      * **/
@@ -19,7 +20,7 @@ public class Id3Data {
         AddIgToTable();
         SortIgTable();
         ID3Result(prepData.getPath());
-        //PrintIgTable();
+       // PrintIgTable();
     }
 
     private void PrintIgTable() {
@@ -92,11 +93,12 @@ public class Id3Data {
             Mails++;
             NewTable=prepData.MainTable;
             prepData.ReadMail(file);
+            System.out.println("word: " + prepData.words[0][0]+" thesi: " + prepData.words[0][1] + " ig: "+ prepData.words[0][2]);
             if(prepData.checkSpam(file))
             {
                 counter++;
             }
-            if(prepData.tempSet.contains(prepData.words[0][0]))
+            if(prepData.tempSet.contains((int)prepData.words[2][0]))
             {
                 ProbabilityTable = CalculateSpam(prepData.words[0][1],1,NewTable);
                 System.out.println("contains SpamPro: "+ ProbabilityTable[0]+" HamPro: "+ProbabilityTable[1]);
@@ -113,8 +115,8 @@ public class Id3Data {
                     NewTable= FillNewTable(MailExist,1,NewTable);
                     AddIgToTable(NewTable);
                     SortIgTable();
+                    System.out.println("word: " + prepData.words[0][0]+" thesi: " + prepData.words[0][1] + " ig: "+ prepData.words[0][2]);
                 }
-
             }
             else
             {
@@ -130,12 +132,14 @@ public class Id3Data {
                 }
                 else
                 {
-                    NewTable= FillNewTable(MailExist,0,NewTable);
-                    NewTable= FillNewTable(MailExist,1,NewTable);
+                    NewTable= FillNewTable(TotalMails-MailExist,0,NewTable);
                     AddIgToTable(NewTable);
                     SortIgTable();
+                    System.out.println("word: " + prepData.words[0][0]+" thesi: " + prepData.words[0][1] + " ig: "+ prepData.words[0][2]);
                 }
+
             }
+
         }//end for
         System.out.println("Mails: "+ Mails );
         System.out.println("Spam: "+ counter);
@@ -145,7 +149,7 @@ public class Id3Data {
         NewTable = new int[newNumber][prepData.words.length];
         for(int i=0; i<table.length; i++)
         {
-            if(table[i][(int)prepData.words[0][0]]==k)
+            if(table[i][(int)prepData.words[0][1]]==k)
             {
                 for (int j=0; j<table[0].length; j++)
                 {
@@ -160,6 +164,7 @@ public class Id3Data {
         MailExist=0;
         HamExist=0;
         SpamExist=0;
+        TotalMails=0;
         double tempTable[] = new double[2];
         for(int i= 0; i<table.length; i++)
         {
@@ -175,13 +180,14 @@ public class Id3Data {
                     SpamExist++;
                 }
             }
+            TotalMails++;
         }
         double SpamProbability= (double) SpamExist/(double)MailExist;
         double HamProbability= 1- SpamProbability;
         tempTable[0] = SpamProbability;
         tempTable[1]= HamProbability;
         return  tempTable;
-    }
+    }//end CalculateSpam
     /**compare to values and returns the biggest**/
     private double compare(double value1, double value2)
     {
@@ -205,14 +211,14 @@ public class Id3Data {
         }
         return CategoryPerWord / WordExists;
     }
-    private double IG(int lexi,int NewTable[][]) {
+    private double IG(int lexi, int NewTable[][]) {
         Calculate cal = new Calculate();
         cal.setSpamCounter(getNewTableSpamCounter(NewTable));
         cal.setMailCounter(getNewTableMailCounter(NewTable));
-        double p1 = WordProbapility(lexi, 0, 0) * cal.log2(1 + WordProbapility(lexi, 0, 0));
-        double p2 = WordProbapility(lexi, 0, 1) * cal.log2(1 + WordProbapility(lexi, 0, 1));
-        double p3 = WordProbapility(lexi, 1, 0) * cal.log2(1 + WordProbapility(lexi, 1, 0));
-        double p4 = WordProbapility(lexi, 1, 1) * cal.log2(1 + WordProbapility(lexi, 1, 1));
+        double p1 = WordProbapility(lexi, 0, 0,NewTable) * cal.log2(1 + WordProbapility(lexi, 0, 0,NewTable));
+        double p2 = WordProbapility(lexi, 0, 1,NewTable) * cal.log2(1 + WordProbapility(lexi, 0, 1,NewTable));
+        double p3 = WordProbapility(lexi, 1, 0,NewTable) * cal.log2(1 + WordProbapility(lexi, 1, 0,NewTable));
+        double p4 = WordProbapility(lexi, 1, 1,NewTable) * cal.log2(1 + WordProbapility(lexi, 1, 1,NewTable));
         return cal.TotalEntropy() + (p1 + p2 + p3 + p4);
     }
     private double getNewTableSpamCounter(int NewTable[][])
@@ -239,7 +245,7 @@ public class Id3Data {
 
     private void AddIgToTable(int NewTable[][]) {
         for (int i = 0; i < NewTable[0].length; i++) {
-            prepData.words[i][2] = IG(i);
+            prepData.words[i][2] = IG(i,NewTable);
         }
     }
 }//end class

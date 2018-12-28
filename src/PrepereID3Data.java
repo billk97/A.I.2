@@ -162,7 +162,6 @@ public class PrepereID3Data {
     /**reads a single mail and saves it to a temporary hash set**/
     public void ReadMail(File file) throws FileNotFoundException {
         String localPath = path + Integer.toString(10);
-        File dir = new File(localPath);
         tempSet = new HashSet<Integer>();
         Scanner scanner = new Scanner(file);
         while (scanner.hasNext()) {
