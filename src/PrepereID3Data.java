@@ -10,7 +10,7 @@ public class PrepereID3Data {
     public HashSet<Integer> tempSet; //contains the vocabulary of each mail at the time
     public double[][] words; //[lexi,thesi,ig] just like a pointer table
     public int[][] MainTable;//contains all the mails in a vector form <0,1,0,1,0,1,0,1,0,0>
-    private String path = "src\\pu_corpora_public\\pu3\\part";
+    public String path = "src\\pu_corpora_public\\pu3\\part";
     private int MailCounter;
     private int TrainingDataNumber = 8;
     private double SpamCounter = 0.0;

@@ -1,9 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Scanner;
 
 public class Id3Data {
     PrepereID3Data prepData = new PrepereID3Data();//all the data is prepered and implemented in the Main Table
@@ -22,7 +18,8 @@ public class Id3Data {
         Ckeck2DTableSH();
         AddIgToTable();
         SortIgTable();
-        PrintIgTable();
+        ID3Result(prepData.getPath());
+        //PrintIgTable();
     }
 
     private void PrintIgTable() {
@@ -75,6 +72,7 @@ public class Id3Data {
         return cal.TotalEntropy() + (p1 + p2 + p3 + p4);
     }
 
+
     private void AddIgToTable() {
         for (int i = 0; i < prepData.MainTable[0].length; i++) {
             prepData.words[i][2] = IG(i);
@@ -84,70 +82,108 @@ public class Id3Data {
         Sort2Table sort = new Sort2Table();
         sort.bubbleSort(prepData.words);
     }
-    private void ID3CheckWords(String path) throws FileNotFoundException {
+    private void ID3Result(String path) throws FileNotFoundException {
         String localPath = path + Integer.toString(10);
         File dir = new File(localPath);
-        double WordExist = 0.0;
-        double WordNotExist = 0.0;
+        double ProbabilityTable[] = new double[2];
+        int counter=0;
+        int Mails=0;
         for (File file : dir.listFiles()) {
+            Mails++;
+            NewTable=prepData.MainTable;
             prepData.ReadMail(file);
+            if(prepData.checkSpam(file))
+            {
+                counter++;
+            }
             if(prepData.tempSet.contains(prepData.words[0][0]))
             {
-                WordExist = CalculateSpam(prepData.words[0][1],1);
+                ProbabilityTable = CalculateSpam(prepData.words[0][1],1,NewTable);
+                System.out.println("contains SpamPro: "+ ProbabilityTable[0]+" HamPro: "+ProbabilityTable[1]);
+                if(ProbabilityTable[0]>0.1)
+                {
+                    System.out.println("Spam: ");
+                }
+                else if(ProbabilityTable[1]>0.1)
+                {
+                    System.out.println("Ham: ");
+                }
+                else
+                {
+                    NewTable= FillNewTable(MailExist,1,NewTable);
+                    AddIgToTable(NewTable);
+                    SortIgTable();
+                }
+
             }
             else
             {
-                WordNotExist = CalculateSpam(prepData.words[0][1],1);
+                ProbabilityTable = CalculateSpam(prepData.words[0][1],0,NewTable);
+                System.out.println("SpamPro: "+ ProbabilityTable[0]+" HamPro: "+ProbabilityTable[1]);
+                if(ProbabilityTable[0]>0.1)
+                {
+                    System.out.println("Spam: ");
+                }
+                else if(ProbabilityTable[1]>0.1)
+                {
+                    System.out.println("Ham: ");
+                }
+                else
+                {
+                    NewTable= FillNewTable(MailExist,0,NewTable);
+                    NewTable= FillNewTable(MailExist,1,NewTable);
+                    AddIgToTable(NewTable);
+                    SortIgTable();
+                }
             }
-            if(WordExist>WordNotExist)
-            {
-                NewTable(MailExist,1);
-            }
-            else if(WordExist>WordNotExist)
-            {
-                NewTable(MailNotExist,0);
-            }
-        }
-    }
-    private  void NewTable(int newNumber,int k)
+        }//end for
+        System.out.println("Mails: "+ Mails );
+        System.out.println("Spam: "+ counter);
+    }//end class
+    private  int [][] FillNewTable(int newNumber, int k, int table[][])
     {
         NewTable = new int[newNumber][prepData.words.length];
-        for(int i=0; i<prepData.MainTable.length; i++)
+        for(int i=0; i<table.length; i++)
         {
-            if(prepData.MainTable[i][(int)prepData.words[0][0]]==k)
+            if(table[i][(int)prepData.words[0][0]]==k)
             {
-                for (int j=0; j<prepData.MainTable[0].length; j++)
+                for (int j=0; j<table[0].length; j++)
                 {
-                    NewTable[i][j]=prepData.MainTable[i][j];
+                    NewTable[i][j]=table[i][j];
                 }
             }
         }
+        return NewTable;
     }
-    private double CalculateSpam (double word , int SpamOrHam)
+    private double[] CalculateSpam (double word , int WordExist,int table[][])
     {
-
-        for(int i= 0; i<prepData.MainTable.length; i++)
+        MailExist=0;
+        HamExist=0;
+        SpamExist=0;
+        double tempTable[] = new double[2];
+        for(int i= 0; i<table.length; i++)
         {
-            if(prepData.MainTable[i][(int)word]==SpamOrHam)
+            if(table[i][(int)word]==WordExist)
             {
                 MailExist++;
-            }
-            if(prepData.MainTable[i][(int)word]==SpamOrHam&&prepData.MainTable[i][prepData.MainTable.length-1]==1)
-            {
-                HamExist++;
-            }
-            else if(prepData.MainTable[i][(int)word]==SpamOrHam&&prepData.MainTable[i][prepData.MainTable.length-1]==0)
-            {
-                SpamExist++;
+                if(table[i][table.length-1]==1)
+                {
+                    HamExist++;
+                }
+                else if(table[i][table.length-1]==0)
+                {
+                    SpamExist++;
+                }
             }
         }
-        double SpamProbability= SpamExist/MailExist;
+        double SpamProbability= (double) SpamExist/(double)MailExist;
         double HamProbability= 1- SpamProbability;
-        return  compaire(SpamProbability,HamProbability);
+        tempTable[0] = SpamProbability;
+        tempTable[1]= HamProbability;
+        return  tempTable;
     }
-
-
-    private double compaire(double value1, double value2)
+    /**compare to values and returns the biggest**/
+    private double compare(double value1, double value2)
     {
         double max=value1;
         if(max<value2)
@@ -156,41 +192,54 @@ public class Id3Data {
         }
         return max;
     }
+    private double WordProbapility(int lexi, int Exist, int Category,int NewTable[][]) {
+        double WordExists = 0.0;
+        double CategoryPerWord = 0.0;
+        for (int i = 0; i < NewTable.length; i++) {
+            if (NewTable[i][lexi] == Exist && NewTable[i][NewTable[0].length - 1] == Category) {
+                CategoryPerWord++;
+            }
+            if (NewTable[i][lexi] == Exist) {
+                WordExists++;
+            }
+        }
+        return CategoryPerWord / WordExists;
+    }
+    private double IG(int lexi,int NewTable[][]) {
+        Calculate cal = new Calculate();
+        cal.setSpamCounter(getNewTableSpamCounter(NewTable));
+        cal.setMailCounter(getNewTableMailCounter(NewTable));
+        double p1 = WordProbapility(lexi, 0, 0) * cal.log2(1 + WordProbapility(lexi, 0, 0));
+        double p2 = WordProbapility(lexi, 0, 1) * cal.log2(1 + WordProbapility(lexi, 0, 1));
+        double p3 = WordProbapility(lexi, 1, 0) * cal.log2(1 + WordProbapility(lexi, 1, 0));
+        double p4 = WordProbapility(lexi, 1, 1) * cal.log2(1 + WordProbapility(lexi, 1, 1));
+        return cal.TotalEntropy() + (p1 + p2 + p3 + p4);
+    }
+    private double getNewTableSpamCounter(int NewTable[][])
+    {
+        int Counter=0;
+        for(int i=0; i<NewTable.length; i++)
+        {
+            if(NewTable[i][NewTable[0].length-1]==0)
+            {
+                Counter++;
+            }
+        }
+        return Counter;
+    }
+    private double getNewTableMailCounter(int NewTable[][])
+    {
+        int Counter=0;
+        for(int i=0; i<NewTable.length; i++)
+        {
+                Counter++;
+        }
+        return Counter;
+    }
 
-    private void ID3Algorithm(String path) throws FileNotFoundException {
-        String localPath = path + Integer.toString(10);
-        File dir = new File(localPath);
-        for (File file : dir.listFiles()) {
-            prepData.ReadMail(file);
-            for (int i = 0; i < prepData.words.length; i++) {
-                int foundcounter = 0;
-                int nonfoundcounter = 0;
-                int spamcounter = 0;
-                int hamcounter = 0;
-                if (prepData.tempSet.contains(prepData.words[i][0])) {
-                    for (int j = 0; j < prepData.MainTable.length; j++) {
-                        if (prepData.MainTable[j][i] == 1) {
-                            foundcounter++;
-                            if (prepData.MainTable[j][prepData.MainTable[0].length - 1] == 0) {
-                                spamcounter++;
-                            } else {
-                                hamcounter++;
-                            }//end if
-                        }//end //if
-                    }//end for
-                } else {
-                    for (int j = 0; j < prepData.MainTable.length; j++) {
-                        if (prepData.MainTable[j][i] == 0) {
-                            nonfoundcounter++;
-                            if (prepData.MainTable[j][prepData.MainTable[0].length - 1] == 0) {
-                                spamcounter++;
-                            } else {
-                                hamcounter++;
-                            }
-                        }//end if 1
-                    }//end for3
-                }// end else1
-            }//end for 2
-        }//end for1
-    }// end ID3Algorithm
+    private void AddIgToTable(int NewTable[][]) {
+        for (int i = 0; i < NewTable[0].length; i++) {
+            prepData.words[i][2] = IG(i);
+        }
+    }
 }//end class
