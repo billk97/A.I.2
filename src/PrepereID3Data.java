@@ -68,7 +68,7 @@ public class PrepereID3Data {
         Iterator<Integer> it = MailHash.keySet().iterator();
         while (it.hasNext()) {
             int onoma = it.next();
-            if (MailHash.get(onoma)[0] < 10 || MailHash.get(onoma)[0] > 800) {
+            if (MailHash.get(onoma)[0] < 4 || MailHash.get(onoma)[0] > 2000) {
                 it.remove();
             }
         }//end while
