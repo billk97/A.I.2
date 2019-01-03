@@ -20,7 +20,7 @@ public class Id3Data {
         AddIgToTable();
         SortIgTable();
         ID3Result(prepData.getPath());
-       // PrintIgTable();
+        PrintIgTable();
     }
 
     private void PrintIgTable() {
@@ -29,6 +29,7 @@ public class Id3Data {
             System.out.print(" word id: " + prepData.words[i][1]);
             System.out.print(" word Ig: " + prepData.words[i][2]+ "\n");
         }
+        System.out.println(prepData.words.length);
     }
 
     /**in order to take the number of rows
@@ -75,7 +76,7 @@ public class Id3Data {
 
 
     private void AddIgToTable() {
-        for (int i = 0; i < prepData.MainTable[0].length; i++) {
+        for (int i = 0; i < prepData.MainTable[0].length-1; i++) {
             prepData.words[i][2] = IG(i);
         }
     }
@@ -90,6 +91,7 @@ public class Id3Data {
         int counter=0;
         int Mails=0;
         for (File file : dir.listFiles()) {
+            System.out.println("mail: " + file);
             Mails++;
             NewTable=prepData.MainTable;
             prepData.ReadMail(file);
@@ -98,45 +100,13 @@ public class Id3Data {
             {
                 counter++;
             }
-            if(prepData.tempSet.contains((int)prepData.words[2][0]))
+            if(prepData.tempSet.contains((int)prepData.words[0][0]))
             {
-                ProbabilityTable = CalculateSpam(prepData.words[0][1],1,NewTable);
-                System.out.println("contains SpamPro: "+ ProbabilityTable[0]+" HamPro: "+ProbabilityTable[1]);
-                if(ProbabilityTable[0]>0.1)
-                {
-                    System.out.println("Spam: ");
-                }
-                else if(ProbabilityTable[1]>0.1)
-                {
-                    System.out.println("Ham: ");
-                }
-                else
-                {
-                    NewTable= FillNewTable(MailExist,1,NewTable);
-                    AddIgToTable(NewTable);
-                    SortIgTable();
-                    System.out.println("word: " + prepData.words[0][0]+" thesi: " + prepData.words[0][1] + " ig: "+ prepData.words[0][2]);
-                }
+                regration(ProbabilityTable,1);
             }
             else
             {
-                ProbabilityTable = CalculateSpam(prepData.words[0][1],0,NewTable);
-                System.out.println("SpamPro: "+ ProbabilityTable[0]+" HamPro: "+ProbabilityTable[1]);
-                if(ProbabilityTable[0]>0.1)
-                {
-                    System.out.println("Spam: ");
-                }
-                else if(ProbabilityTable[1]>0.1)
-                {
-                    System.out.println("Ham: ");
-                }
-                else
-                {
-                    NewTable= FillNewTable(TotalMails-MailExist,0,NewTable);
-                    AddIgToTable(NewTable);
-                    SortIgTable();
-                    System.out.println("word: " + prepData.words[0][0]+" thesi: " + prepData.words[0][1] + " ig: "+ prepData.words[0][2]);
-                }
+                regration(ProbabilityTable,0);
 
             }
 
@@ -144,6 +114,30 @@ public class Id3Data {
         System.out.println("Mails: "+ Mails );
         System.out.println("Spam: "+ counter);
     }//end class
+
+    private  void regration(double tempTable[],int option)
+    {
+        tempTable = CalculateSpam(prepData.words[1000][1],option,NewTable);
+        System.out.println("last word: "+ NewTable[0].length);
+        System.out.println("SpamPro: "+ tempTable[0]+" HamPro: "+tempTable[1]);
+        System.out.println("best ig :" +prepData.words[0][0] + " thesi: " + prepData.words[0][1] + " ig: " + prepData.words[0][2] );
+        if(tempTable[0]>0.1)
+        {
+            System.out.println("Spam: ");
+        }
+        else if(tempTable[1]>0.1)
+        {
+            System.out.println("Ham: ");
+        }
+        else
+        {
+            NewTable= FillNewTable(TotalMails-MailExist,option,NewTable);
+            AddIgToTable(NewTable);
+            SortIgTable();
+            System.out.println("word: " + prepData.words[0][0]+" thesi: " + prepData.words[0][1] + " ig: "+ prepData.words[0][2]);
+        }
+
+    }
     private  int [][] FillNewTable(int newNumber, int k, int table[][])
     {
         NewTable = new int[newNumber][prepData.words.length];
@@ -186,6 +180,13 @@ public class Id3Data {
         double HamProbability= 1- SpamProbability;
         tempTable[0] = SpamProbability;
         tempTable[1]= HamProbability;
+        System.out.println("WordExist: " +WordExist);
+        System.out.println("tempTable[0]: " + tempTable[0]);
+        System.out.println("tempTable[1]: " + tempTable[1]);
+        System.out.println("SpamExist: " + SpamExist);
+        System.out.println("HamExidst: " + HamExist);
+        System.out.println("MailExist: "+ MailExist);
+        System.out.println("TotalMails: " + TotalMails);
         return  tempTable;
     }//end CalculateSpam
     /**compare to values and returns the biggest**/
@@ -244,7 +245,7 @@ public class Id3Data {
     }
 
     private void AddIgToTable(int NewTable[][]) {
-        for (int i = 0; i < NewTable[0].length; i++) {
+        for (int i = 0; i < NewTable[0].length-1; i++) {
             prepData.words[i][2] = IG(i,NewTable);
         }
     }
