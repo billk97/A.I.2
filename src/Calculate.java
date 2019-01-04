@@ -9,6 +9,7 @@ public class Calculate {
 
     public void setSpamCounter(double spamCounter) {
         SpamCounter = spamCounter;
+
     }
 
     public double getMailCounter() {
@@ -17,6 +18,7 @@ public class Calculate {
 
     public void setMailCounter(double mailCounter) {
         MailCounter = mailCounter;
+
     }
 
     public double log2(double n) {
@@ -32,6 +34,6 @@ public class Calculate {
     }
 
     public double TotalEntropy() {
-        return -(getSpamProp() * log2(getSpamProp()) + getHamProp() * log2(getHamProp()));
+        return (getSpamProp() * log2(1+getSpamProp()) + getHamProp() * log2(1+getHamProp()));
     }
 }
