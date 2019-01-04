@@ -20,8 +20,8 @@ public class Id3Data {
     public void Initializer() throws FileNotFoundException {
         prepData.initializeData();
         Ckeck2DTableSH();
-       // AddIgToTable(prepData.MainTable);
-        //SortIgTable();
+        AddIgToTable(prepData.MainTable);
+        SortIgTable(2);
         ID3Result(prepData.getPath());
         //  PrintIgTable();
 
@@ -71,7 +71,7 @@ public class Id3Data {
             NewTable=new int [prepData.MainTable.length][prepData.MainTable[0].length];
             CopyTable(NewTable,prepData.MainTable);
             AddIgToTable(prepData.MainTable);
-            SortIgTable();
+            SortIgTable(2);
             prepData.ReadMail(file);//ftiaxnw to hash set gia kathe mail
 
             double DecisionTable[] =new double[]{0.0,0.0};
@@ -89,7 +89,7 @@ public class Id3Data {
                     DecisionTable=CalculateSpam(prepData.words[0][1],1,NewTable);
 
                     AddIgToTable(NewTable);
-                    SortIgTable();
+                    SortIgTable(2);
                 } else {
                     LocalTable = new int[CountNewTableBounds(prepData.words[0][1], NewTable, 0)][prepData.words.length];
                     CopyTable(LocalTable, NewTable, prepData.words[0][1], 0);
@@ -98,7 +98,7 @@ public class Id3Data {
                     DecisionTable=CalculateSpam(prepData.words[0][1],0,NewTable);
 
                     AddIgToTable(NewTable);
-                    SortIgTable();
+                    SortIgTable(2);
                 }
             }
 
@@ -135,10 +135,10 @@ public class Id3Data {
      * Calculates the spamProbability and ham  of the word with the most ig and takes a decision baste on the probabilities
      **/
     private boolean Decision(double tempTable []) {
-        if (tempTable[0] > 0.6) {
+        if (tempTable[0] > 0.7) {
             System.out.println(">>>>>>>>>>>>>Spam: " + "\n");
             return false;
-        } else if (tempTable[1] > 0.6) {
+        } else if (tempTable[1] > 0.7) {
             System.out.println(">>>>>>>>>>>>>Ham: " + "\n");
             return false;
         }
@@ -267,25 +267,18 @@ public class Id3Data {
      * Adds the calculated Ig to the words table
      **/
     private void AddIgToTable(int NewTable[][]) {
+        SortIgTable(1);
         for (int i = 0; i < NewTable[0].length - 1; i++) {
-            for (int j =0; j <NewTable[0].length-1; j ++)
-            {
-                if(prepData.words[i][1]==(double) j)
-                {
-                    prepData.words[i][2] = IG(i, NewTable);
-                    break;
-                }
-            }
-
+            prepData.words[i][2] = IG(i, NewTable);
         }
     }//end AddIgToTable
 
     /**
      * Sorts the table words
      **/
-    private void SortIgTable() {
+    private void SortIgTable(int column) {
         Sort2Table sort = new Sort2Table();
-        sort.bubbleSort(prepData.words);
+        sort.bubbleSort(prepData.words,column);
     }
 
     /**
