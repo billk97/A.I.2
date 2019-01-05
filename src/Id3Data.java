@@ -12,7 +12,8 @@ public class Id3Data {
     int SpamNotExist = 0;
     int HamNotExist = 0;
     int TotalMails = 0;
-
+    int SpamCounter=0;
+    int HammCounter=0;
     /**
      * this function inputs all the data from the txt
      * into a HashMap adds the to a table shorts them and prints them
@@ -73,14 +74,14 @@ public class Id3Data {
             AddIgToTable(prepData.MainTable);
             SortIgTable(2);
             prepData.ReadMail(file);//ftiaxnw to hash set gia kathe mail
-
             double DecisionTable[] =new double[]{0.0,0.0};
-            while (Decision(DecisionTable))
+            if (prepData.checkSpam(file)) {
+                counter++;
+            }
+            while (Decision(DecisionTable,file))
             {
-                System.out.println("word: " + prepData.words[0][0] + " thesi: " + prepData.words[0][1] + " ig: " + prepData.words[0][2]); //leksi me megalitero ig
-                if (prepData.checkSpam(file)) {
-                    counter++;
-                }
+               // System.out.println("word: " + prepData.words[0][0] + " thesi: " + prepData.words[0][1] + " ig: " + prepData.words[0][2]); //leksi me megalitero ig
+
                 if (prepData.tempSet.contains((int) prepData.words[0][0])) {
                     LocalTable = new int[CountNewTableBounds(prepData.words[0][1], NewTable, 1)][prepData.words.length];
                     CopyTable(LocalTable, NewTable, prepData.words[0][1], 1);
@@ -105,6 +106,11 @@ public class Id3Data {
         }//end for
         System.out.println("Mails: " + Mails);
         System.out.println("Spam: " + counter);
+        System.out.println("Ham: " + (Mails-counter));
+        System.out.println("PredictedSpa: " + SpamCounter);
+        System.out.println("PredictedHam: "+ HammCounter);
+        System.out.println("Accuracy: " +((double)(SpamCounter+HammCounter)/(double)Mails*100.0));
+
     }//end class
 
     private void CopyTable(int LTable[][], int NTable[][]) {
@@ -134,12 +140,20 @@ public class Id3Data {
     /**
      * Calculates the spamProbability and ham  of the word with the most ig and takes a decision baste on the probabilities
      **/
-    private boolean Decision(double tempTable []) {
+    private boolean Decision(double tempTable [],File dir) throws FileNotFoundException {
         if (tempTable[0] > 0.7) {
             System.out.println(">>>>>>>>>>>>>Spam: " + "\n");
+            if(prepData.checkSpam(dir))
+            {
+                SpamCounter++;
+            }
             return false;
         } else if (tempTable[1] > 0.7) {
             System.out.println(">>>>>>>>>>>>>Ham: " + "\n");
+            if(!prepData.checkSpam(dir))
+            {
+                HammCounter++;
+            }
             return false;
         }
         return true;
@@ -209,14 +223,14 @@ public class Id3Data {
         double HamProbability = 1 - SpamProbability;
         tempTable[0] = SpamProbability;
         tempTable[1] = HamProbability;
-        System.out.println("(0 the word does not exist 1 it exists)");
+      /*  System.out.println("(0 the word does not exist 1 it exists)");
         System.out.println("WordExist: " + WordExist);
         System.out.println("TotalMails: " + TotalMails);
         System.out.println("MailExist: " + MailExist);
         System.out.println("SpamExist: " + SpamExist);
         System.out.println("HamExidst: " + HamExist);
         System.out.println("SpamPro: "+ tempTable[0]);
-        System.out.println("HamPro: "+ tempTable[1]);
+        System.out.println("HamPro: "+ tempTable[1]);*/
         return tempTable;
     }//end CalculateSpam
 
@@ -245,6 +259,10 @@ public class Id3Data {
             if (NewTable[i][lexi] == Exist) {
                 WordExists++;
             }
+        }
+        if(WordExists==0.0)
+        {
+            WordExists=1;
         }
         return CategoryPerWord / WordExists;//P(C=1/x1)
     }//end WordProbability
@@ -304,6 +322,7 @@ public class Id3Data {
         }
         return Counter;
     }//end getNewTableMailCounter
+
 
 
 }//end class

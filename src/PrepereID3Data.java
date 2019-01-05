@@ -10,7 +10,7 @@ public class PrepereID3Data {
     public HashSet<Integer> tempSet; //contains the vocabulary of each mail at the time
     public double[][] words; //[lexi,thesi,ig] just like a pointer table
     public int[][] MainTable;//contains all the mails in a vector form <0,1,0,1,0,1,0,1,0,0>
-    public String path = "src\\pu_corpora_public\\pu3\\part";
+    public String path = "src\\pu_corpora_public\\pu1\\part";
     private int MailCounter;
     private int TrainingDataNumber = 8;
     private double SpamCounter ;
@@ -86,7 +86,7 @@ public class PrepereID3Data {
         Iterator<Integer> it = MailHash.keySet().iterator();
         while (it.hasNext()) {
             int onoma = it.next();
-            if (MailHash.get(onoma)[0] < 30 || MailHash.get(onoma)[0] > 2000) {
+            if (MailHash.get(onoma)[0] < 10 || MailHash.get(onoma)[0] > 2000) {
                 it.remove();
             }
         }//end while
