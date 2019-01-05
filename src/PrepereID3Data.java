@@ -12,9 +12,9 @@ public class PrepereID3Data {
     public int[][] MainTable;//contains all the mails in a vector form <0,1,0,1,0,1,0,1,0,0>
     public String path = "src\\pu_corpora_public\\pu1\\part";
     private int MailCounter;
-    private int TrainingDataNumber = 8;
-    private double SpamCounter ;
-    private double HamCounter ;
+    public int TrainingDataNumber = 8;
+    public double SpamCounter ;
+    public double HamCounter ;
 
     public String getPath() {
         return path;
@@ -56,8 +56,7 @@ public class PrepereID3Data {
         inputToHashMap(path, TrainingDataNumber);
         Pruning();
         HashWordToTable();
-        Read(MailCounter, TrainingDataNumber, path);
-      //  PrintMainTable();
+
     }
 
     /**
@@ -155,7 +154,7 @@ public class PrepereID3Data {
      * <0,0,0,0,1,1,1,0>
      * <0,0,0,0,1,1,1,0>
      **/
-    private void Read(int TotalMails, int posost, String path) throws FileNotFoundException {
+    public void Read(int TotalMails, int posost, String path) throws FileNotFoundException {
         System.out.println("Total Mails: " + TotalMails + " Words.length " + words.length);
         SpamCounter=0.0;
         HamCounter=0.0;

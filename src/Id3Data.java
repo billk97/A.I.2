@@ -1,33 +1,67 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 
 public class Id3Data {
-    PrepereID3Data prepData = new PrepereID3Data();//all the data is prepered and implemented in the Main Table
+    PrepereID3Data prepData ;//all the data is prepered and implemented in the Main Table
     int[][] NewTable;
     int[][] LocalTable;
-    int SpamExist = 0;
-    int HamExist = 0;
-    int MailExist = 0;
-    int MailNotExist = 0;
-    int SpamNotExist = 0;
-    int HamNotExist = 0;
-    int TotalMails = 0;
-    int SpamCounter=0;
-    int HammCounter=0;
-    public double TrueFalse[] = {0.0, 0.0, 0.0, 0.0};/**TrueFalse==TP,TN,FP,FN**/
+    int SpamExist ;
+    int HamExist ;
+    int MailExist ;
+    int MailNotExist ;
+    int SpamNotExist ;
+    int HamNotExist ;
+    int TotalMails;
+    int HammCounter;
+    int SpamCounter;
+    public double[]  TrueFalse ;/**TrueFalse==TP,TN,FP,FN**/
     /**
      * this function inputs all the data from the txt
      * into a HashMap adds the to a table shorts them and prints them
      **/
-    public void Initializer() throws FileNotFoundException {
-        prepData.initializeData();
-        Ckeck2DTableSH();
-        AddIgToTable(prepData.MainTable);
-        SortIgTable(2);
-        ID3Result(prepData.getPath());
-        //  PrintIgTable();
+    public void Initializer(int MailCounter, int TrainingDataNumber, String path) throws FileNotFoundException {
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream("ID3Result.txt"), "utf-8"));
+            writer.write("MailCounter  Accuracy  HamPrecision  HamRecall  SpamPrecision  SpamRecall");
+            ((BufferedWriter) writer).newLine();
+            for (int i = 1; i <= TrainingDataNumber; i++) {
+                prepData = new PrepereID3Data();
+                 SpamExist =0;
+                 HamExist =0;
+                 MailExist =0;
+                 MailNotExist =0;
+                 SpamNotExist =0;
+                 HamNotExist =0;
+                 TotalMails=0;
+                 HammCounter=0;
+                 SpamCounter=0;
+                TrueFalse = new double[]{0.0, 0.0, 0.0, 0.0};
+                prepData.initializeData();
+                prepData.Read(MailCounter, i, path);
+                Ckeck2DTableSH();
+                AddIgToTable(prepData.MainTable);
+                SortIgTable(2);
+                ID3Result(prepData.getPath());
+                writer.write((prepData.getSpamCounter() + prepData.getHamCounter())
+                        + " " + Double.toString(Accuracy()).replace(".", ",")
+                        + " " + Double.toString(HamPrecision()).replace(".", ",")
+                        + " " + Double.toString(HamRecall()).replace(".", ",")
+                        + " " + Double.toString(SpamPrecision()).replace(".", ",")
+                        + " " + Double.toString(SpamRecall()).replace(".", ","));
+                ((BufferedWriter) writer).newLine();
+                System.out.println("==================");
+            }
 
+        } catch (IOException ex) {
+            // Report
+        } finally {
+            try {
+                writer.close();
+            } catch (Exception ex) {/*ignore*/}
+        }
     }
+
 
     public void PrintIgTable() {
         for (int i = 0; i < prepData.words.length; i++) {
@@ -70,25 +104,24 @@ public class Id3Data {
         for (File file : dir.listFiles()) {
             System.out.println("mail: " + file);
             Mails++;
-            NewTable=new int [prepData.MainTable.length][prepData.MainTable[0].length];
-            CopyTable(NewTable,prepData.MainTable);
+            NewTable = new int[prepData.MainTable.length][prepData.MainTable[0].length];
+            CopyTable(NewTable, prepData.MainTable);
             AddIgToTable(prepData.MainTable);
             SortIgTable(2);
             prepData.ReadMail(file);//ftiaxnw to hash set gia kathe mail
-            double DecisionTable[] =new double[]{0.0,0.0};
+            double DecisionTable[] = new double[]{0.0, 0.0};
             if (prepData.checkSpam(file)) {
                 counter++;
             }
-            while (Decision(DecisionTable,file))
-            {
-               // System.out.println("word: " + prepData.words[0][0] + " thesi: " + prepData.words[0][1] + " ig: " + prepData.words[0][2]); //leksi me megalitero ig
+            while (Decision(DecisionTable, file)) {
+                // System.out.println("word: " + prepData.words[0][0] + " thesi: " + prepData.words[0][1] + " ig: " + prepData.words[0][2]); //leksi me megalitero ig
 
                 if (prepData.tempSet.contains((int) prepData.words[0][0])) {
                     LocalTable = new int[CountNewTableBounds(prepData.words[0][1], NewTable, 1)][prepData.words.length];
                     CopyTable(LocalTable, NewTable, prepData.words[0][1], 1);
                     NewTable = new int[LocalTable.length][LocalTable[0].length];
                     CopyTable(NewTable, LocalTable);
-                    DecisionTable=CalculateSpam(prepData.words[0][1],1,NewTable);
+                    DecisionTable = CalculateSpam(prepData.words[0][1], 1, NewTable);
 
                     AddIgToTable(NewTable);
                     SortIgTable(2);
@@ -97,7 +130,7 @@ public class Id3Data {
                     CopyTable(LocalTable, NewTable, prepData.words[0][1], 0);
                     NewTable = new int[LocalTable.length][LocalTable[0].length];
                     CopyTable(NewTable, LocalTable);
-                    DecisionTable=CalculateSpam(prepData.words[0][1],0,NewTable);
+                    DecisionTable = CalculateSpam(prepData.words[0][1], 0, NewTable);
 
                     AddIgToTable(NewTable);
                     SortIgTable(2);
@@ -107,7 +140,7 @@ public class Id3Data {
         }//end for
         System.out.println("Mails: " + Mails);
         System.out.println("Spam: " + counter);
-        System.out.println("Ham: " + (Mails-counter));
+        System.out.println("Ham: " + (Mails - counter));
         System.out.println("Accuracy: " + Accuracy());
         System.out.println("HamPRecision: " + HamPrecision());
         System.out.println("SpamPRecision: " + SpamPrecision());
@@ -129,7 +162,7 @@ public class Id3Data {
         int k = 0;
 
         for (int i = 0; i < NTable.length; i++) {
-            if (NTable[i][(int)wordId] == WordExistsOrNot) {
+            if (NTable[i][(int) wordId] == WordExistsOrNot) {
 
                 for (int j = 0; j < NTable[0].length; j++) {
                     LTable[k][j] = NTable[i][j];
@@ -143,22 +176,20 @@ public class Id3Data {
     /**
      * Calculates the spamProbability and ham  of the word with the most ig and takes a decision baste on the probabilities
      **/
-    private boolean Decision(double tempTable [],File dir) throws FileNotFoundException {
+    private boolean Decision(double tempTable[], File dir) throws FileNotFoundException {
         if (tempTable[0] > 0.75) {
-            System.out.println(">>>>>>>>>>>>>Spam: " + "\n");
-            if(prepData.checkSpam(dir))
-            {
+            //System.out.println(">>>>>>>>>>>>>Spam: " + "\n");
+            if (prepData.checkSpam(dir)) {
                 TrueFalse[1]++;
-            }else{
+            } else {
                 TrueFalse[3]++;
             }
             return false;
         } else if (tempTable[1] > 0.75) {
-            System.out.println(">>>>>>>>>>>>>Ham: " + "\n");
-            if(!prepData.checkSpam(dir))
-            {
+            //System.out.println(">>>>>>>>>>>>>Ham: " + "\n");
+            if (!prepData.checkSpam(dir)) {
                 TrueFalse[0]++;
-            }else{
+            } else {
                 TrueFalse[2]++;
             }
             return false;
@@ -267,9 +298,8 @@ public class Id3Data {
                 WordExists++;
             }
         }
-        if(WordExists==0.0)
-        {
-            WordExists=1;
+        if (WordExists == 0.0) {
+            WordExists = 1;
         }
         return CategoryPerWord / WordExists;//P(C=1/x1)
     }//end WordProbability
@@ -303,7 +333,7 @@ public class Id3Data {
      **/
     private void SortIgTable(int column) {
         Sort2Table sort = new Sort2Table();
-        sort.bubbleSort(prepData.words,column);
+        sort.bubbleSort(prepData.words, column);
     }
 
     /**
@@ -333,6 +363,7 @@ public class Id3Data {
     public double Accuracy() {
         return ((TrueFalse[0] + TrueFalse[1]) / (TrueFalse[0] + TrueFalse[1] + TrueFalse[2] + TrueFalse[3])) * 100;
     }
+
     public double HamPrecision() {
         return (TrueFalse[0] / (TrueFalse[0] + TrueFalse[2])) * 100;
     }
@@ -348,9 +379,6 @@ public class Id3Data {
     public double SpamRecall() {
         return (TrueFalse[1] / (TrueFalse[1] + TrueFalse[2])) * 100;
     }
-
-
-
 
 
 }//end class

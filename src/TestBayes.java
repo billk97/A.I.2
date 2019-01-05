@@ -26,7 +26,7 @@ public class TestBayes {
         Writer writer = null;
         try {
             writer = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream("filename.txt"), "utf-8"));
+                    new FileOutputStream("BayesResult.txt"), "utf-8"));
             writer.write("MailCounter  Accuracy  HamPrecision  HamRecall  SpamPrecision  SpamRecall");
             ((BufferedWriter) writer).newLine();
             String path = "src\\pu_corpora_public\\pu3\\part";
