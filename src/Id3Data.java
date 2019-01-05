@@ -14,6 +14,7 @@ public class Id3Data {
     int TotalMails = 0;
     int SpamCounter=0;
     int HammCounter=0;
+    public double TrueFalse[] = {0.0, 0.0, 0.0, 0.0};/**TrueFalse==TP,TN,FP,FN**/
     /**
      * this function inputs all the data from the txt
      * into a HashMap adds the to a table shorts them and prints them
@@ -107,9 +108,11 @@ public class Id3Data {
         System.out.println("Mails: " + Mails);
         System.out.println("Spam: " + counter);
         System.out.println("Ham: " + (Mails-counter));
-        System.out.println("PredictedSpa: " + SpamCounter);
-        System.out.println("PredictedHam: "+ HammCounter);
-        System.out.println("Accuracy: " +((double)(SpamCounter+HammCounter)/(double)Mails*100.0));
+        System.out.println("Accuracy: " + Accuracy());
+        System.out.println("HamPRecision: " + HamPrecision());
+        System.out.println("SpamPRecision: " + SpamPrecision());
+        System.out.println("HamRecall: " + HamRecall());
+        System.out.println("SpamRecall: " + SpamRecall());
 
     }//end class
 
@@ -141,18 +144,22 @@ public class Id3Data {
      * Calculates the spamProbability and ham  of the word with the most ig and takes a decision baste on the probabilities
      **/
     private boolean Decision(double tempTable [],File dir) throws FileNotFoundException {
-        if (tempTable[0] > 0.7) {
+        if (tempTable[0] > 0.75) {
             System.out.println(">>>>>>>>>>>>>Spam: " + "\n");
             if(prepData.checkSpam(dir))
             {
-                SpamCounter++;
+                TrueFalse[1]++;
+            }else{
+                TrueFalse[3]++;
             }
             return false;
-        } else if (tempTable[1] > 0.7) {
+        } else if (tempTable[1] > 0.75) {
             System.out.println(">>>>>>>>>>>>>Ham: " + "\n");
             if(!prepData.checkSpam(dir))
             {
-                HammCounter++;
+                TrueFalse[0]++;
+            }else{
+                TrueFalse[2]++;
             }
             return false;
         }
@@ -322,6 +329,27 @@ public class Id3Data {
         }
         return Counter;
     }//end getNewTableMailCounter
+
+    public double Accuracy() {
+        return ((TrueFalse[0] + TrueFalse[1]) / (TrueFalse[0] + TrueFalse[1] + TrueFalse[2] + TrueFalse[3])) * 100;
+    }
+    public double HamPrecision() {
+        return (TrueFalse[0] / (TrueFalse[0] + TrueFalse[2])) * 100;
+    }
+
+    public double SpamPrecision() {
+        return (TrueFalse[1] / (TrueFalse[1] + TrueFalse[3])) * 100;
+    }
+
+    public double HamRecall() {
+        return (TrueFalse[0] / (TrueFalse[0] + TrueFalse[3])) * 100;
+    }
+
+    public double SpamRecall() {
+        return (TrueFalse[1] / (TrueFalse[1] + TrueFalse[2])) * 100;
+    }
+
+
 
 
 
