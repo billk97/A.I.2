@@ -1,5 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 
 public class LogisticRegression{
@@ -14,6 +13,7 @@ public class LogisticRegression{
     public double HamCounter ;
     public int epoxes=10;
     public double htta=0.001;
+    public double[]  TrueFalse ;/**TrueFalse==TP,TN,FP,FN**/
 
     public String getPath() {
         return path;
@@ -52,16 +52,71 @@ public class LogisticRegression{
     }
 
     public void initializeData() throws FileNotFoundException {
-        inputToHashMap(path, TrainingDataNumber);
-        Pruning();
-        HashWordToTable();
-        Read(MailCounter,TrainingDataNumber,path);
-        System.out.println("maintable.length: Mails "+MainTable.length+" Maintable[0].length: Vocabulary "+MainTable[0].length);
-        //PrintMainTable();
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream("LogisticRegration.txt"), "utf-8"));
+            writer.write("MailCounter  Accuracy  HamPrecision  HamRecall  SpamPrecision  SpamRecall");
+            ((BufferedWriter) writer).newLine();
+            String localPath = path;
+            for (int i = 1; i <= TrainingDataNumber; i++)
+            {
+                localPath = path+ Integer.toString(i);
+                System.out.println("i: " +i + " ====================================================");
+                setMailCounter(0);
+                setSpamCounter(0);
+                setHamCounter(0);
+                TrueFalse = new double[]{0.0, 0.0, 0.0, 0.0};
+                inputToHashMap(path, i);
+                Pruning();
+                HashWordToTable();
+                Read(MailCounter,i,path);
+                System.out.println("maintable.length: Mails "+MainTable.length+" Maintable[0].length: Vocabulary "+MainTable[0].length);
+                //PrintMainTable();
       /*  System.out.println("sigmoid(5): "+Sigmoid(5));
         System.out.println("sigmoid(2)+sigmoid(3): "+(Sigmoid(3)+Sigmoid(2)));*/
-        regression();
-        CalculateTest(path);
+                regression();
+                CalculateTest(path);
+                writer.write((getSpamCounter() + getHamCounter())
+                        + " " + Double.toString(Accuracy()).replace(".", ",")
+                        + " " + Double.toString(HamPrecision()).replace(".", ",")
+                        + " " + Double.toString(HamRecall()).replace(".", ",")
+                        + " " + Double.toString(SpamPrecision()).replace(".", ",")
+                        + " " + Double.toString(SpamRecall()).replace(".", ","));
+                ((BufferedWriter) writer).newLine();
+                System.out.println("==================");
+
+            }
+
+        } catch (UnsupportedEncodingException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                writer.close();
+            } catch (Exception ex) {/*ignore*/}
+        }
+
+    }
+
+    public double Accuracy() {
+        return ((TrueFalse[0] + TrueFalse[1]) / (TrueFalse[0] + TrueFalse[1] + TrueFalse[2] + TrueFalse[3])) * 100;
+    }
+
+    public double HamPrecision() {
+        return (TrueFalse[0] / (TrueFalse[0] + TrueFalse[2])) * 100;
+    }
+
+    public double SpamPrecision() {
+        return (TrueFalse[1] / (TrueFalse[1] + TrueFalse[3])) * 100;
+    }
+
+    public double HamRecall() {
+        return (TrueFalse[0] / (TrueFalse[0] + TrueFalse[3])) * 100;
+    }
+
+    public double SpamRecall() {
+        return (TrueFalse[1] / (TrueFalse[1] + TrueFalse[2])) * 100;
     }
 
     /**
@@ -322,25 +377,27 @@ public class LogisticRegression{
                 System.out.println(" ham propability "+MailClassify(temp));
                 System.out.println(" HAM");
                 if(!checkSpam(file)){
+                    TrueFalse[0]++;
                     Ham++;
                 }
+                else
+                    {
+                        TrueFalse[2]++;
+                    }
             }else{
                 System.out.println(" spam propability "+MailClassify(temp));
                 System.out.println(" SPAM");
                 if(checkSpam(file)){
                     Spam++;
+                    TrueFalse[1]++;
                 }
+                else
+                    {
+                        TrueFalse[3]++;
+                    }
             }
-
-
-
         }//end for
         System.out.println(" ACCURACY: "+(((double)Spam+(double) Ham)/(double) MailCouonter)*100);
 
     }
-
-
-
-
-
 }
