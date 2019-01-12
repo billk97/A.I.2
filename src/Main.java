@@ -11,10 +11,12 @@ public class Main {
       //testBayes.WriteTxt();
 
         //this is for ID3
-        PrepereID3Data id=new PrepereID3Data();
-        id.initializeData();
-        Id3Data id3Data =new Id3Data();
-        id3Data.Initializer(id.getMailCounter(),id.TrainingDataNumber,id.path);
+//        PrepereID3Data id=new PrepereID3Data();
+//        id.initializeData();
+//        Id3Data id3Data =new Id3Data();
+//        id3Data.Initializer(id.getMailCounter(),id.TrainingDataNumber,id.path);
+        LogisticRegression logistic = new LogisticRegression();
+        logistic.initializeData();
 
 
 
