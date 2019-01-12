@@ -11,7 +11,7 @@ public class LogisticRegression{
     public int TrainingDataNumber = 8;
     public double SpamCounter ;
     public double HamCounter ;
-    public int epoxes=10;
+    public int epoxes=5;
     public double htta=0.001;
     public double[]  TrueFalse ;/**TrueFalse==TP,TN,FP,FN**/
 
