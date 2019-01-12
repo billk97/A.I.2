@@ -13,6 +13,7 @@ public class LogisticRegression{
     public double HamCounter ;
     public int epoxes=5;
     public double htta=0.001;
+
     public double[]  TrueFalse ;/**TrueFalse==TP,TN,FP,FN**/
 
     public String getPath() {
